@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows.Controls;
 using Enigma.Wpf;
 using Enigma.D3.MapHack;
+using Enigma.D3.MemoryModel;
 
 namespace Enigma.D3.Bootloader
 {
