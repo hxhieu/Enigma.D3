@@ -84,8 +84,8 @@ namespace Enigma.D3.MemoryModel
 		public int[] CurrentMapping = new int[0];
 		public T[] PreviousItems;
 		public T[] CurrentItems;
-		public List<int> RemovedItems;
-		public List<int> AddedItems;
+		public List<int> RemovedItems = new List<int>();
+		public List<int> AddedItems = new List<int>();
 
 		public event Action<int, T> ItemRemoved;
 		public event Action<int, T> ItemAdded;
@@ -115,26 +115,29 @@ namespace Enigma.D3.MemoryModel
 
 			RemovedItems.Clear();
 			AddedItems.Clear();
-			if (PreviousMapping.Length == CurrentMapping.Length)
+			for (int i = 0; i < PreviousMapping.Length; i++)
 			{
-				for (int i = 0; i < CurrentMapping.Length; i++)
+				if (CurrentMapping[i] != PreviousMapping[i])
 				{
-					if (CurrentMapping[i] != PreviousMapping[i])
-					{
-						if (PreviousMapping[i] != -1)
-						{
-							RemovedItems.Add(i);
-							OnItemRemoved(i);
-						}
-						if (CurrentMapping[i] != -1)
-						{
-							AddedItems.Add(i);
-							OnItemAdded(i);
-						}
-					}
+					if (PreviousMapping[i] != -1)
+						OnItemRemoved(i);
+					if (CurrentMapping[i] != -1)
+						OnItemAdded(i);
 				}
 			}
+			for (int i = PreviousMapping.Length; i < CurrentMapping.Length; i++)
+			{
+				if (CurrentMapping[i] != -1)
+					OnItemAdded(i);
+			}
+			for (int i = CurrentMapping.Length; i < PreviousMapping.Length; i++)
+			{
+				if (PreviousMapping[i] != -1)
+					OnItemRemoved(i);
+			}
 
+			PreviousItems = CurrentItems;
+			CurrentItems = Enumerable.Range(0, count).Select(x => mr.Read<T>(x * Container.ItemSize)).ToArray();
 
 			//var state = (Container.NextHash << 16) + Container.NextIndex;
 			//if (state != State)
@@ -144,11 +147,13 @@ namespace Enigma.D3.MemoryModel
 
 		private void OnItemRemoved(int index)
 		{
+			RemovedItems.Add(index);
 			ItemRemoved?.Invoke(index, default(T));
 		}
 
 		private void OnItemAdded(int index)
 		{
+			AddedItems.Add(index);
 			ItemAdded?.Invoke(index, default(T));
 		}
 
