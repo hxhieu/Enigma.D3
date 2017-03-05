@@ -305,17 +305,17 @@ namespace Enigma.D3.MemoryModel
 				ID = 0x000;
 				Name = 0x004;
 				NameLength = 0x080;
-				ActorSNO = -1; // TODO
-				MonsterQuality = -1; // TODO
+				ActorSNO = 0x090; // TODO
+				MonsterQuality = 0x0B8;
 				Position = 0x0D8;
-				Radius = -1; // TODO
+				Radius = 0x0E4;
 				WorldSNO = 0x118;
-				GizmoType = -1; // TODO
-				ActorType = -1; // TODO
-				Hitpoints = -1; // TODO
-				TeamID = -1; // TODO
-				ObjectFlags = -1; // TODO
-				CollisionFlags = -1; //TODO
+				GizmoType = 0x1C0; // TODO
+				ActorType = 0x1C4;
+				Hitpoints = 0x1C8;
+				TeamID = 0x1D0;
+				ObjectFlags = 0x1D8; // TODO
+				CollisionFlags = 0x238; //TODO
 			}
 			else throw new PlatformNotSupportedException();
 		}
@@ -425,12 +425,12 @@ namespace Enigma.D3.MemoryModel
 			if (platform == Platform.X86)
 			{
 				SizeOf = 0x59BB8;
-				Items = 0x00000;
+				Items = 0x00038;
 			}
 			else if (platform == Platform.X64)
 			{
 				SizeOf = 0x5AB60;
-				Items = 0x00000;
+				Items = 0x00060;
 			}
 			else throw new PlatformNotSupportedException();
 		}
