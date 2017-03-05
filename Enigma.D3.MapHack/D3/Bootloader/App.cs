@@ -42,13 +42,13 @@ namespace Enigma.D3.Bootloader
 						Execute.OnUIThread(() =>
 						{
 							Canvas canvas = new Canvas();
-							overlay = OverlayWindow.Create((engine.Context.Memory as ProcessMemoryReader).Process, canvas);
+							overlay = OverlayWindow.Create(((engine.Context.Memory as ReadOnlyMemory).Reader as ProcessMemoryReader).Process, canvas);
 							overlay.Show();
 							minimap = new Minimap(canvas);
 						});
 						watcher.AddTask(minimap.Update);
 						watcher.Start();
-						(engine.Context.Memory as ProcessMemoryReader).Process.WaitForExit();
+						((engine.Context.Memory as ReadOnlyMemory).Reader as ProcessMemoryReader).Process.WaitForExit();
 						Execute.OnUIThread(() => overlay.Close());
 					}
 					Shell.Instance.IsAttached = false;
@@ -61,7 +61,7 @@ namespace Enigma.D3.Bootloader
 		{
 			while (true)
 			{
-				var process = Process.GetProcessesByName("Diablo III").FirstOrDefault();
+				var process = Process.GetProcessesByName("Diablo III").FirstOrDefault() ?? Process.GetProcessesByName("Diablo III64").FirstOrDefault();
 				if (process != null)
 				{
 					var engine = new Engine(process);

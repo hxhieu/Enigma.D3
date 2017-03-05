@@ -55,9 +55,9 @@ namespace Enigma.D3.MapHack
 
 		private LocalData _localData;
 		private ObjectManager _objectManager;
-		private byte[] _acdsBuffer = new byte[0];
 
 		private bool _isLocalActorReady;
+		private ContainerObserver<ACD> _acdsObserver;
 
 		public void Update(Engine engine)
 		{
@@ -71,23 +71,26 @@ namespace Enigma.D3.MapHack
 
 				var itemsToAdd = new List<IMapMarker>();
 
-				var acds = _objectManager.ACDManager.ActorCommonData;
-				var acdsObserver = new ContainerObserver<ACD> { Container = acds };
-
-				acdsObserver.Update();
-				var playerAcdId = _objectManager.PlayerDataManager[_objectManager.Player.LocalPlayerIndex].ACDID;
-				_playerAcd = acdsObserver.CurrentItems.First(x => x.ID == playerAcdId);
-
-				foreach (var index in acdsObserver.AddedItems)
+				if (_acdsObserver == null)
 				{
-					var acd = acdsObserver.CurrentItems.First(x => (short)x.ID == index);
+					var acds = _objectManager.ACDManager.ActorCommonData;
+					_acdsObserver = new ContainerObserver<ACD> { Container = acds };
+				}
+
+				_acdsObserver.Update();
+				var playerAcdId = _objectManager.PlayerDataManager[_objectManager.Player.LocalPlayerIndex].ACDID;
+				_playerAcd = _acdsObserver.CurrentItems.First(x => x.ID == playerAcdId);
+				
+				foreach (var index in _acdsObserver.AddedItems)
+				{
+					var acd = _acdsObserver.CurrentItems.First(x => (short)x.ID == index);
 					if (_minimapItemsDic.ContainsKey(acd.Address))
 						continue;
 
 					int acdId = acd.ID;
 					if (acdId == -1)
 						continue;
-
+					
 					var actorSnoId = acd.ActorSNO;
 					if (_ignoredSnoIds.Contains(actorSnoId))
 						continue;
@@ -112,6 +115,7 @@ namespace Enigma.D3.MapHack
 			}
 			catch (Exception exception)
 			{
+				_acdsObserver = null;
 				OnUpdateException(exception);
 			}
 		}

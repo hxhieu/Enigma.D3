@@ -103,13 +103,17 @@ namespace Enigma.D3.MapHack.Markers
 
 		private static bool IsValidGizmoChest(ACD acd)
 		{
-			return (acd.CollisionFlags & 0x400) == 0 &&
-				Attributes.ChestOpen.GetValue(acd) != 1;
+			// TODO
+			return false;
+			//return (acd.CollisionFlags & 0x400) == 0 &&
+			//	Attributes.ChestOpen.GetValue(acd) != 1;
 		}
 
 		private static bool IsValidGizmoLoreChest(ACD acd)
 		{
-			return Attributes.ChestOpen.GetValue(acd, 0xA0000) != 1;
+			// TODO
+			return false;
+			//return Attributes.ChestOpen.GetValue(acd, 0xA0000) != 1;
 		}
 
 		private static bool IsValidGizmoWreckableObject(ACD acd)
