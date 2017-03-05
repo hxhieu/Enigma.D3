@@ -12,6 +12,8 @@ namespace Enigma.D3.DataTypes
 
 		public static implicit operator uint(SNO sno) => sno.Value;
 
+		public static implicit operator int(SNO sno) => (int)sno.Value;
+
 		public static implicit operator SNO(uint value) => new SNO { Value = value };
 
 		public uint Value;

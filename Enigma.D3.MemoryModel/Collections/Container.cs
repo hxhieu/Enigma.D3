@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Enigma.D3.MemoryModel.Collections
 {
 	// TODO: Other offsets for 32-bit?
-	public class Container<T> : MemoryObject, IContainer<T>
+	public class Container<T> : MemoryObject, IReadOnlyList<T>
 	{
 		public const int SizeOf = 0x130;
 

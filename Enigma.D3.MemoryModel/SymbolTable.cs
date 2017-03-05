@@ -158,7 +158,7 @@ namespace Enigma.D3.MemoryModel
 			if (platform == Platform.X86)
 			{
 				SizeOf = 0xA40;
-				RenderTick = -1; // TODO
+				RenderTick = 0x038; // TODO
 				GameState = -1; // TODO
 				GameServerAddress = -1; // TODO
 				GameServerAddressLength = 128;
@@ -287,8 +287,17 @@ namespace Enigma.D3.MemoryModel
 				ID = 0x000;
 				Name = 0x004;
 				NameLength = 0x080;
+				ActorSNO = 0x090;
+				MonsterQuality = 0x0B8;
 				Position = 0x0D0;
+				Radius = 0x0DC;
 				WorldSNO = 0x108;
+				GizmoType = 0x180;
+				ActorType = 0x184;
+				Hitpoints = 0x188;
+				TeamID = 0x190;
+				ObjectFlags = 0x198;
+				CollisionFlags = 0x248;
 			}
 			else if (platform == Platform.X64)
 			{
@@ -296,8 +305,17 @@ namespace Enigma.D3.MemoryModel
 				ID = 0x000;
 				Name = 0x004;
 				NameLength = 0x080;
+				ActorSNO = -1; // TODO
+				MonsterQuality = -1; // TODO
 				Position = 0x0D8;
+				Radius = -1; // TODO
 				WorldSNO = 0x118;
+				GizmoType = -1; // TODO
+				ActorType = -1; // TODO
+				Hitpoints = -1; // TODO
+				TeamID = -1; // TODO
+				ObjectFlags = -1; // TODO
+				CollisionFlags = -1; //TODO
 			}
 			else throw new PlatformNotSupportedException();
 		}
@@ -306,8 +324,17 @@ namespace Enigma.D3.MemoryModel
 		public int ID;
 		public int Name;
 		public int NameLength;
+		public int ActorSNO;
+		public int MonsterQuality;
 		public int Position;
+		public int Radius;
 		public int WorldSNO;
+		public int GizmoType;
+		public int ActorType;
+		public int Hitpoints;
+		public int TeamID;
+		public int ObjectFlags;
+		public int CollisionFlags;
 	}
 
 	public struct LocalDataSymbols

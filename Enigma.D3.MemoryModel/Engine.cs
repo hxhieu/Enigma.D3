@@ -4,6 +4,7 @@ using Enigma.Memory;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -11,11 +12,14 @@ using System.Threading.Tasks;
 
 namespace Enigma.D3.MemoryModel
 {
-	public class Engine
+	public class Engine : IDisposable
 	{
 		private readonly MemoryContext _ctx;
 		private readonly Thread _thread;
 		private readonly ManualResetEvent _stopSignal;
+
+		public Engine(Process process)
+			: this(new MemoryContext(new ProcessMemoryReader(process).Memory)) { }
 
 		public Engine(MemoryContext ctx)
 		{
@@ -23,6 +27,8 @@ namespace Enigma.D3.MemoryModel
 			_thread = new Thread(Run) { Name = nameof(Engine) };
 			_stopSignal = new ManualResetEvent(false);
 		}
+
+		public MemoryContext Context => _ctx;
 
 		public void Start()
 		{
@@ -60,6 +66,12 @@ namespace Enigma.D3.MemoryModel
 		{
 			_stopSignal.Set();
 		}
+
+		public void Dispose()
+		{
+			Stop();
+			_ctx.Memory.Dispose();
+		}
 	}
 
 	public class ContainerObserver<T>
@@ -72,6 +84,8 @@ namespace Enigma.D3.MemoryModel
 		public int[] CurrentMapping = new int[0];
 		public T[] PreviousItems;
 		public T[] CurrentItems;
+		public List<int> RemovedItems;
+		public List<int> AddedItems;
 
 		public event Action<int, T> ItemRemoved;
 		public event Action<int, T> ItemAdded;
@@ -99,6 +113,8 @@ namespace Enigma.D3.MemoryModel
 				CurrentMapping[i] = mr.Read<int>(i * Container.ItemSize);
 
 
+			RemovedItems.Clear();
+			AddedItems.Clear();
 			if (PreviousMapping.Length == CurrentMapping.Length)
 			{
 				for (int i = 0; i < CurrentMapping.Length; i++)
@@ -106,9 +122,15 @@ namespace Enigma.D3.MemoryModel
 					if (CurrentMapping[i] != PreviousMapping[i])
 					{
 						if (PreviousMapping[i] != -1)
+						{
+							RemovedItems.Add(i);
 							OnItemRemoved(i);
+						}
 						if (CurrentMapping[i] != -1)
+						{
+							AddedItems.Add(i);
 							OnItemAdded(i);
+						}
 					}
 				}
 			}

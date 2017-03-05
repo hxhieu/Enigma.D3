@@ -9,6 +9,8 @@ using System.Windows.Controls;
 using Enigma.Wpf;
 using Enigma.D3.MapHack;
 using Enigma.D3.MemoryModel;
+using System.Diagnostics;
+using Enigma.Memory;
 
 namespace Enigma.D3.Bootloader
 {
@@ -40,13 +42,13 @@ namespace Enigma.D3.Bootloader
 						Execute.OnUIThread(() =>
 						{
 							Canvas canvas = new Canvas();
-							overlay = OverlayWindow.Create(engine.Process, canvas);
+							overlay = OverlayWindow.Create((engine.Context.Memory as ProcessMemoryReader).Process, canvas);
 							overlay.Show();
 							minimap = new Minimap(canvas);
 						});
 						watcher.AddTask(minimap.Update);
 						watcher.Start();
-						engine.Process.WaitForExit();
+						(engine.Context.Memory as ProcessMemoryReader).Process.WaitForExit();
 						Execute.OnUIThread(() => overlay.Close());
 					}
 					Shell.Instance.IsAttached = false;
@@ -57,17 +59,18 @@ namespace Enigma.D3.Bootloader
 
 		private Engine CreateEngine()
 		{
-			Engine engine = Engine.Create();
-			while (engine == null)
+			while (true)
 			{
+				var process = Process.GetProcessesByName("Diablo III").FirstOrDefault();
+				if (process != null)
+				{
+					var engine = new Engine(process);
+					while (engine.Context.DataSegment.ApplicationLoopCount == 0)
+						Thread.Sleep(1000);
+					return engine;
+				}
 				Thread.Sleep(1000);
-				engine = Engine.Create();
 			}
-			while (engine.ApplicationLoopCount == 0)
-			{
-				Thread.Sleep(1000);
-			}
-			return engine;
 		}
 	}
 }

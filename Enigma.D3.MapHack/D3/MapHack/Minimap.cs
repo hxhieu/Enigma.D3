@@ -10,10 +10,11 @@ using Enigma.Wpf;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows;
-using Enigma.D3.Helpers;
 using Enigma.D3.Enums;
 using System.Windows.Media.Media3D;
 using Enigma.D3.MapHack.Markers;
+using Enigma.D3.MemoryModel;
+using Enigma.D3.MemoryModel.Core;
 
 namespace Enigma.D3.MapHack
 {
@@ -50,8 +51,7 @@ namespace Enigma.D3.MapHack
 		private Dictionary<int, IMapMarker> _minimapItemsDic = new Dictionary<int, IMapMarker>();
 		private int _lastFrame;
 		private HashSet<int> _ignoredSnoIds = new HashSet<int>();
-		private int _firstFreeAcd;
-		private ActorCommonData _playerAcd;
+		private ACD _playerAcd;
 
 		private LocalData _localData;
 		private ObjectManager _objectManager;
@@ -71,81 +71,41 @@ namespace Enigma.D3.MapHack
 
 				var itemsToAdd = new List<IMapMarker>();
 
-				var acds = ActorCommonData.Container;
-				if (acds == null)
+				var acds = _objectManager.ACDManager.ActorCommonData;
+				var acdsObserver = new ContainerObserver<ACD> { Container = acds };
+
+				acdsObserver.Update();
+				var playerAcdId = _objectManager.PlayerDataManager[_objectManager.Player.LocalPlayerIndex].ACDID;
+				_playerAcd = acdsObserver.CurrentItems.First(x => x.ID == playerAcdId);
+
+				foreach (var index in acdsObserver.AddedItems)
 				{
-					Trace.TraceError("ACDs == null");
-				}
-				else
-				{
-					var bufferSizePreDump = _acdsBuffer.Length;
+					var acd = acdsObserver.CurrentItems.First(x => (short)x.ID == index);
+					if (_minimapItemsDic.ContainsKey(acd.Address))
+						continue;
 
-					acds.TakeSnapshot();
-					var dump = acds.GetBufferDump(ref _acdsBuffer);
+					int acdId = acd.ID;
+					if (acdId == -1)
+						continue;
 
-					var bufferSizePostDump = _acdsBuffer.Length;
-					if (bufferSizePostDump < bufferSizePreDump)
+					var actorSnoId = acd.ActorSNO;
+					if (_ignoredSnoIds.Contains(actorSnoId))
+						continue;
+
+					if (!_minimapItemsDic.ContainsKey(acd.Address))
 					{
-						_minimapItems.Clear();
-						_minimapItemsDic.Clear();
-						_playerAcd = null;
-						return;
-					}
-
-					// Must have a local ACD to base coords on.
-					if (_playerAcd == null)
-					{
-						var playerAcdId = ActorCommonDataHelper.GetLocalAcd().x000_Id;
-
-						foreach (var item in dump)
+						bool ignore;
+						var minimapItem = MapMarkerFactory.Create(acd, out ignore);
+						if (ignore)
 						{
-							var acdId = BitConverter.ToInt32(_acdsBuffer, item.BufferOffset + 0x00);
-							if (acdId == playerAcdId)
-							{
-								_playerAcd = item.Create();
-							}
+							_ignoredSnoIds.Add(actorSnoId);
 						}
-
-						if (_playerAcd == null)
-							return;
-					}
-
-					var firstFreeAcd = acds.x114_Free;
-					if (firstFreeAcd != _firstFreeAcd)
-					{
-						foreach (var item in dump)
+						else if (minimapItem != null)
 						{
-							if (_minimapItemsDic.ContainsKey(item.Address))
-								continue;
-							var acd = item.Create();
-
-							int acdId = acd.x000_Id;
-							if (acdId == -1)
-								continue;
-
-							var actorSnoId = acd.x090_ActorSnoId;
-							if (_ignoredSnoIds.Contains(actorSnoId))
-								continue;
-
-							if (!_minimapItemsDic.ContainsKey(acd.Address))
-							{
-								bool ignore;
-								var minimapItem = MapMarkerFactory.Create(acd, out ignore);
-								if (ignore)
-								{
-									_ignoredSnoIds.Add(actorSnoId);
-								}
-								else if (minimapItem != null)
-								{
-									_minimapItemsDic.Add(acd.Address, minimapItem);
-									itemsToAdd.Add(minimapItem);
-								}
-							}
+							_minimapItemsDic.Add(acd.Address, minimapItem);
+							itemsToAdd.Add(minimapItem);
 						}
 					}
-
-					_firstFreeAcd = firstFreeAcd;
-					acds.FreeSnapshot();
 				}
 
 				UpdateUI(itemsToAdd);
@@ -158,18 +118,18 @@ namespace Enigma.D3.MapHack
 
 		private bool IsLocalActorValid(Engine engine)
 		{
-			_localData = _localData ?? engine.LocalData;
+			_localData = _localData ?? engine.Context.DataSegment.LocalData;
 
-			byte isNotInGame = (byte)_localData.x04_IsNotInGame;
+			var isNotInGame = _localData.IsStartUpGame;
 			//byte isActorCreated = (byte)_localData.x00_IsActorCreated;
-			if (isNotInGame == 0xCD) // structure is being updated, everything is cleared with 0xCD ('-')
+			if (_localData.ActID == unchecked((int)0xCDCDCDCD)) // structure is being updated, everything is cleared with 0xCD ('-')
 			{
 				if (!_isLocalActorReady)
 					return false;
 			}
 			else
 			{
-				if (isNotInGame == 0)
+				if (!isNotInGame)
 				{
 					if (!_isLocalActorReady)
 					{
@@ -192,10 +152,10 @@ namespace Enigma.D3.MapHack
 
 		private bool IsObjectManagerOnNewFrame(Engine engine)
 		{
-			_objectManager = _objectManager ?? engine.ObjectManager;
+			_objectManager = _objectManager ?? engine.Context.DataSegment.ObjectManager;
 
 			// Don't do anything unless game updated frame.
-			int currentFrame = _objectManager.x038_Counter_CurrentFrame;
+			int currentFrame = _objectManager.RenderTick;
 			if (currentFrame == _lastFrame)
 				return false;
 			if (currentFrame < _lastFrame)
@@ -219,11 +179,11 @@ namespace Enigma.D3.MapHack
 			var itemsToRemove = new List<IMapMarker>();
 			foreach (var mapItem in _minimapItems.Concat(itemsToAdd))
 			{
-				if (!mapItem.Update(_playerAcd.x108_WorldId, new Point3D
+				if (!mapItem.Update(_playerAcd.WorldSNO, new Point3D
 				{
-					X = _playerAcd.x0D0_WorldPosX,
-					Y = _playerAcd.x0D4_WorldPosY,
-					Z = _playerAcd.x0D8_WorldPosZ
+					X = _playerAcd.Position.X,
+					Y = _playerAcd.Position.Y,
+					Z = _playerAcd.Position.Z
 				}))
 				{
 					itemsToRemove.Add(mapItem);
