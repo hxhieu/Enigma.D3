@@ -14,7 +14,7 @@ namespace Mitmeo.D3.App.Commands
             _execute = execute;
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged = delegate { };
 
         public bool CanExecute(object parameter)
         {

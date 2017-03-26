@@ -17,6 +17,8 @@ namespace Enigma.D3.MapHack
 
         public static MitmeoShell Instance { get { return _lazyInstance.Value; } }
 
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
         private bool _isAttached;
 
         public SendKeyViewModel SendKeys { get; set; }
@@ -72,7 +74,10 @@ namespace Enigma.D3.MapHack
             InitializeComponent();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public void Init(Engine engine = null)
+        {
+            SendKeys = new SendKeyViewModel();
+        }
 
         private void Refresh(string propertyName)
         {

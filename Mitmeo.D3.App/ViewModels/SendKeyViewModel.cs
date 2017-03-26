@@ -17,7 +17,6 @@ namespace Mitmeo.D3.App.ViewModels
     [ImplementPropertyChanged]
     public class SendKeyViewModel
     {
-        private readonly Engine _engine;
         private readonly List<Timer> _timers;
         private readonly InputSimulator _input;
 
@@ -75,9 +74,8 @@ namespace Mitmeo.D3.App.ViewModels
 
         public bool Enabled { get; set; }
 
-        public SendKeyViewModel(Engine engine)
+        public SendKeyViewModel()
         {
-            _engine = engine;
             _timers = new List<Timer>();
             _input = new InputSimulator();
 
@@ -115,9 +113,12 @@ namespace Mitmeo.D3.App.ViewModels
 
         public void Run()
         {
+            var engine = Engine.Current;
+            if (engine == null) return;
+
             var player = ActorCommonData.Local;
 
-            if (player == null || _engine == null || Keys == null || !Keys.Any()) return;
+            if (player == null || Keys == null || !Keys.Any()) return;
 
             foreach (var key in Keys)
             {
@@ -131,7 +132,7 @@ namespace Mitmeo.D3.App.ViewModels
 
                     //D3 window only
                     var currentHandle = Win32Interop.GetForegroundWindow();
-                    if (currentHandle != _engine.Process.MainWindowHandle) return;
+                    if (currentHandle != engine.Process.MainWindowHandle) return;
 
                     //Enough Resources
                     if (player.GetResourcePct() < key.ResourcePct) return;
