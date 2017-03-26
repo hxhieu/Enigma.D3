@@ -22,7 +22,7 @@ namespace Enigma.D3.Bootloader
 
 		protected override void OnStartup(StartupEventArgs e)
 		{
-			MainWindow = Shell.Instance;
+			MainWindow = MitmeoShell.Instance;
 			MainWindow.Show();
 			ShutdownMode = ShutdownMode.OnMainWindowClose;
 
@@ -33,7 +33,7 @@ namespace Enigma.D3.Bootloader
 					using (var engine = CreateEngine())
 					using (var watcher = new WatcherThread(engine))
 					{
-						Shell.Instance.IsAttached = true;
+                        MitmeoShell.Instance.IsAttached = true;
 						Minimap minimap = null;
 						OverlayWindow overlay = null;
 						Execute.OnUIThread(() =>
@@ -48,7 +48,7 @@ namespace Enigma.D3.Bootloader
 						engine.Process.WaitForExit();
 						Execute.OnUIThread(() => overlay.Close());
 					}
-					Shell.Instance.IsAttached = false;
+                    MitmeoShell.Instance.IsAttached = false;
 					//Execute.OnUIThread(() => MainWindow.Close());
 				}
 			}, TaskCreationOptions.LongRunning);

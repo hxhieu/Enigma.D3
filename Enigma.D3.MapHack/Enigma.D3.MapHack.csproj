@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Enigma</RootNamespace>
     <AssemblyName>ED3Tools</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -93,6 +93,9 @@
     <Compile Include="D3\MapHack\Markers\MapMarkerFactory.cs" />
     <Compile Include="D3\MapHack\Markers\MapMarkerAcd.cs" />
     <Compile Include="D3\MapHack\Markers\MapMarkerAcdMonster.cs" />
+    <Compile Include="D3\MapHack\MitmeoShell.xaml.cs">
+      <DependentUpon>MitmeoShell.xaml</DependentUpon>
+    </Compile>
     <Compile Include="D3\MapHack\Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
     </Compile>
@@ -113,6 +116,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -121,6 +125,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="D3\MapHack\Minimap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="D3\MapHack\MitmeoShell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -145,6 +153,10 @@
     <ProjectReference Include="..\Enigma.Wpf\Enigma.Wpf.csproj">
       <Project>{fdab0808-f6e9-44d7-a411-121ccec2e61e}</Project>
       <Name>Enigma.Wpf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mitmeo.D3.App\Mitmeo.D3.App.csproj">
+      <Project>{110028c5-2d2e-4fe2-8816-0af03f728ff3}</Project>
+      <Name>Mitmeo.D3.App</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
