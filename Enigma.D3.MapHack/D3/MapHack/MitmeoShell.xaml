@@ -118,6 +118,7 @@
                             </Style>
                         </DockPanel.Resources>
                         <Button DockPanel.Dock="Right" Content="Save" Command="{Binding SendKeys.SaveCommand}" />
+                        <Button DockPanel.Dock="Right" Content="Load" Command="{Binding SendKeys.LoadCommand}" />
                         <Button DockPanel.Dock="Left" Content="Add Key" Command="{Binding SendKeys.AddKeyCommand}" />
                         <Button DockPanel.Dock="Left" Content="Delete Selected" Command="{Binding SendKeys.DeleteKeyCommand}" Foreground="red"/>
                     </DockPanel>

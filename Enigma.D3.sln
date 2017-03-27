@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitmeo.D3.App", "Mitmeo.D3.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enigma.D3.Mitmeo.Extensions", "Enigma.D3.Mitmeo.Extensions\Enigma.D3.Mitmeo.Extensions.csproj", "{875BA5D9-303C-4053-9CA1-D142A3052C2A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitmeo.Common.Utils", "Mitmeo.Common.Utils\Mitmeo.Common.Utils.csproj", "{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Enigma.D3.Memory.Generated\Enigma.D3.Memory.Generated.projitems*{23848103-7dc0-4ab0-958f-b8793ffd1f2d}*SharedItemsImports = 4
@@ -237,6 +239,18 @@ Global
 		{875BA5D9-303C-4053-9CA1-D142A3052C2A}.Release|x64.Build.0 = Release|Any CPU
 		{875BA5D9-303C-4053-9CA1-D142A3052C2A}.Release|x86.ActiveCfg = Release|Any CPU
 		{875BA5D9-303C-4053-9CA1-D142A3052C2A}.Release|x86.Build.0 = Release|Any CPU
+		{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}.Debug|x64.Build.0 = Debug|Any CPU
+		{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}.Debug|x86.Build.0 = Debug|Any CPU
+		{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}.Release|x64.ActiveCfg = Release|Any CPU
+		{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}.Release|x64.Build.0 = Release|Any CPU
+		{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}.Release|x86.ActiveCfg = Release|Any CPU
+		{9FBFFFD3-527F-41F0-8BB6-552C1AE40C07}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

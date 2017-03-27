@@ -116,6 +116,10 @@
       <Project>{3a385f29-42e2-4caf-b1f2-2a1a7b90a971}</Project>
       <Name>Enigma.Memory</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mitmeo.Common.Utils\Mitmeo.Common.Utils.csproj">
+      <Project>{9fbfffd3-527f-41f0-8bb6-552c1ae40c07}</Project>
+      <Name>Mitmeo.Common.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />

@@ -1,5 +1,6 @@
 ﻿using Enigma.D3;
 using Enigma.D3.Mitmeo.Extensions;
+using Mitmeo.Common.Utils;
 using Mitmeo.D3.App.Commands;
 using Mitmeo.D3.App.Core;
 using Mitmeo.D3.App.Models;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Timers;
+using System.Windows;
 using System.Windows.Input;
 using WindowsInput;
 using WindowsInput.Native;
@@ -19,6 +21,7 @@ namespace Mitmeo.D3.App.ViewModels
     {
         private readonly List<Timer> _timers;
         private readonly InputSimulator _input;
+        private const string SAVE_FILE = "keys.bin";
 
         public ObservableCollection<SendKeyModel> Keys { get; set; }
 
@@ -72,6 +75,48 @@ namespace Mitmeo.D3.App.ViewModels
             }
         }
 
+        private ICommand _saveCommand;
+        public ICommand SaveCommand
+        {
+            get
+            {
+                if (_saveCommand == null)
+                {
+                    _saveCommand = new RelayCommand(
+                        action => true,
+                        action =>
+                        {
+                            var serialise = new Serialiser();
+                            serialise.WriteToBinaryFile(SAVE_FILE, Keys.ToArray());
+                            MessageBox.Show("Your key setup is saved.", "INFO", MessageBoxButton.OK);
+                        }
+                    );
+                }
+
+                return _saveCommand;
+            }
+        }
+
+        private ICommand _loadCommand;
+        public ICommand LoadCommand
+        {
+            get
+            {
+                if (_loadCommand == null)
+                {
+                    _loadCommand = new RelayCommand(
+                        action => true,
+                        action =>
+                        {
+                            Keys = new ObservableCollection<SendKeyModel>(LoadSaveFile());
+                        }
+                    );
+                }
+
+                return _loadCommand;
+            }
+        }
+
         public bool Enabled { get; set; }
 
         public SendKeyViewModel()
@@ -79,19 +124,7 @@ namespace Mitmeo.D3.App.ViewModels
             _timers = new List<Timer>();
             _input = new InputSimulator();
 
-            Keys = new ObservableCollection<SendKeyModel>
-            {
-                new SendKeyModel
-                {
-                    Code = VirtualKeyCode.VK_1,
-                    Interval = 200
-                },
-                new SendKeyModel
-                {
-                    Code = VirtualKeyCode.VK_2,
-                    Interval = 1000
-                }
-            };
+            Keys = new ObservableCollection<SendKeyModel>(LoadSaveFile());
         }
 
         public void Disable()
@@ -148,6 +181,31 @@ namespace Mitmeo.D3.App.ViewModels
 
                 _timers.Add(timer);
             }
+        }
+
+        private IEnumerable<SendKeyModel> LoadSaveFile(bool useDefault = true)
+        {
+            Disable();
+
+            var savedKeys = new Serialiser().ReadFromBinaryFile<SendKeyModel[]>(SAVE_FILE);
+            if (savedKeys == null && useDefault)
+            {
+                savedKeys = new SendKeyModel[]
+                {
+                    new SendKeyModel
+                    {
+                        Code = VirtualKeyCode.VK_1,
+                        Interval = 1000
+                    },
+                    new SendKeyModel
+                    {
+                        Code = VirtualKeyCode.VK_2,
+                        Interval = 1000
+                    }
+                };
+            }
+
+            return savedKeys;
         }
     }
 }

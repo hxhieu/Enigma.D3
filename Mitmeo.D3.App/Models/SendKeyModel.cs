@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WindowsInput.Native;
 
 namespace Mitmeo.D3.App.Models
 {
+    [Serializable]
     public class SendKeyModel
     {
         private List<VirtualKeyCode> _availableKeys = new List<VirtualKeyCode>
