@@ -3,6 +3,7 @@ using Enigma.D3.Mitmeo.Extensions;
 using Mitmeo.D3.App.Commands;
 using Mitmeo.D3.App.Core;
 using Mitmeo.D3.App.Models;
+using Mitmeo.D3.App.ViewModels.Base;
 using PropertyChanged;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

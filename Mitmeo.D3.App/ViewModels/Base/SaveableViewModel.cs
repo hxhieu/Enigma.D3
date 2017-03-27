@@ -3,7 +3,7 @@ using Mitmeo.D3.App.Commands;
 using PropertyChanged;
 using System.Windows.Input;
 
-namespace Mitmeo.D3.App.ViewModels
+namespace Mitmeo.D3.App.ViewModels.Base
 {
     [ImplementPropertyChanged]
     public abstract class SaveableViewModel<TSave> : ViewModelBase

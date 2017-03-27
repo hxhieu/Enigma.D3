@@ -25,9 +25,6 @@ namespace Enigma.D3.Bootloader
             MainWindow = MitmeoShell.Instance;
             MainWindow.Show();
             ShutdownMode = ShutdownMode.OnMainWindowClose;
-
-            MitmeoShell.Instance.Init();
-
             Task.Factory.StartNew(() =>
             {
                 while (true)

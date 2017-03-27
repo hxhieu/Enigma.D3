@@ -1,4 +1,4 @@
-﻿using Mitmeo.D3.App.ViewModels;
+﻿using Mitmeo.D3.App.ViewModels.Base;
 using System;
 
 namespace Mitmeo.D3.App

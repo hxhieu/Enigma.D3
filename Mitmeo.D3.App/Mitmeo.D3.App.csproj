@@ -83,9 +83,9 @@
     </Compile>
     <Compile Include="Models\SendKeyModel.cs" />
     <Compile Include="PropertyChangedNotificationInterceptor.cs" />
-    <Compile Include="ViewModels\SaveableViewModel.cs" />
+    <Compile Include="ViewModels\Base\SaveableViewModel.cs" />
     <Compile Include="ViewModels\SendKeyViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

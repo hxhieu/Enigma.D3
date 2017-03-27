@@ -1,44 +1,27 @@
 ﻿using Enigma.D3.MapHack.Markers;
 using Mitmeo.D3.App.Commands;
 using Mitmeo.D3.App.ViewModels;
+using PropertyChanged;
 using System;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
 namespace Enigma.D3.MapHack
 {
-    public partial class MitmeoShell : Window, INotifyPropertyChanged
+    [ImplementPropertyChanged]
+    public partial class MitmeoShell : Window
     {
         private const double SHELL_MINIMISE = 82;
         private const double SHELL_MAXIMISE = double.PositiveInfinity;
 
         private static readonly Lazy<MitmeoShell> _lazyInstance = new Lazy<MitmeoShell>(() => new MitmeoShell());
-
         public static MitmeoShell Instance { get { return _lazyInstance.Value; } }
 
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
-        private bool _isAttached;
-
-        public SendKeyViewModel SendKeys { get; set; }
-
+        public SendKeyViewModel SendKeys { get; private set; }
         public MapMarkerOptions Options { get; private set; }
-        public bool IsAttached { get { return _isAttached; } set { if (_isAttached != value) { _isAttached = value; Refresh("IsAttached"); } } }
-
-        private double _shellHeight = SHELL_MAXIMISE;
-        public double ShellHeight
-        {
-            get { return _shellHeight; }
-            set { _shellHeight = value; Refresh("ShellHeight"); }
-        }
-
-        private string _toggleButtonText = "-";
-        public string ToggleButtonText
-        {
-            get { return _toggleButtonText; }
-            set { _toggleButtonText = value; Refresh("ToggleButtonText"); }
-        }
+        public bool IsAttached { get; set; }
+        public double ShellHeight { get; private set; } = SHELL_MAXIMISE;
+        public string ToggleButtonText { get; private set; } = "-";
 
         private ICommand _toggleSizeCommand;
         public ICommand ToggleSizeCommand
@@ -70,18 +53,10 @@ namespace Enigma.D3.MapHack
         public MitmeoShell()
         {
             Options = MapMarkerOptions.Instance;
+            SendKeys = new SendKeyViewModel("keys.db");
+
             DataContext = this;
             InitializeComponent();
-        }
-
-        public void Init(Engine engine = null)
-        {
-            SendKeys = new SendKeyViewModel("keys.db");
-        }
-
-        private void Refresh(string propertyName)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
