@@ -1,6 +1,5 @@
 ﻿using Enigma.D3;
 using Enigma.D3.Mitmeo.Extensions;
-using Mitmeo.Common.Utils;
 using Mitmeo.D3.App.Commands;
 using Mitmeo.D3.App.Core;
 using Mitmeo.D3.App.Models;
@@ -17,13 +16,12 @@ using WindowsInput.Native;
 namespace Mitmeo.D3.App.ViewModels
 {
     [ImplementPropertyChanged]
-    public class SendKeyViewModel
+    public class SendKeyViewModel : SaveableViewModel<ObservableCollection<SendKeyModel>>
     {
         private readonly List<Timer> _timers;
         private readonly InputSimulator _input;
-        private const string SAVE_FILE = "keys.bin";
 
-        public ObservableCollection<SendKeyModel> Keys { get; set; }
+        public override ObservableCollection<SendKeyModel> Configuration { get; set; }
 
         private ICommand _addKeyCommand;
         public ICommand AddKeyCommand
@@ -36,12 +34,12 @@ namespace Mitmeo.D3.App.ViewModels
                         action => true,
                         action =>
                         {
-                            Keys.Add(new SendKeyModel
+                            Configuration.Add(new SendKeyModel
                             {
                                 Code = VirtualKeyCode.VK_1,
                                 Interval = 1000
                             });
-                            Disable();
+                            Enabled = false;
                         }
                     );
                 }
@@ -61,12 +59,12 @@ namespace Mitmeo.D3.App.ViewModels
                         action => true,
                         action =>
                         {
-                            var toRemove = new List<SendKeyModel>(Keys.Where(x => x.Selected));
+                            var toRemove = new List<SendKeyModel>(Configuration.Where(x => x.Selected));
                             foreach (var rem in toRemove)
                             {
-                                Keys.Remove(rem);
+                                Configuration.Remove(rem);
                             }
-                            Disable();
+                            Enabled = false;
                         }
                     );
                 }
@@ -75,65 +73,25 @@ namespace Mitmeo.D3.App.ViewModels
             }
         }
 
-        private ICommand _saveCommand;
-        public ICommand SaveCommand
-        {
-            get
-            {
-                if (_saveCommand == null)
-                {
-                    _saveCommand = new RelayCommand(
-                        action => true,
-                        action =>
-                        {
-                            var serialise = new Serialiser();
-                            serialise.WriteToBinaryFile(SAVE_FILE, Keys.ToArray());
-                            MessageBox.Show("Your key setup is saved.", "INFO", MessageBoxButton.OK);
-                        }
-                    );
-                }
-
-                return _saveCommand;
-            }
-        }
-
-        private ICommand _loadCommand;
-        public ICommand LoadCommand
-        {
-            get
-            {
-                if (_loadCommand == null)
-                {
-                    _loadCommand = new RelayCommand(
-                        action => true,
-                        action =>
-                        {
-                            Keys = new ObservableCollection<SendKeyModel>(LoadSaveFile());
-                        }
-                    );
-                }
-
-                return _loadCommand;
-            }
-        }
-
-        public bool Enabled { get; set; }
-
-        public SendKeyViewModel()
+        public SendKeyViewModel(string saveFileName): base(saveFileName)
         {
             _timers = new List<Timer>();
             _input = new InputSimulator();
 
-            Keys = new ObservableCollection<SendKeyModel>(LoadSaveFile());
+            if (Configuration == null)
+            {
+                Configuration = new ObservableCollection<SendKeyModel>
+                {
+                    new SendKeyModel
+                    {
+                        Code = VirtualKeyCode.VK_1,
+                        Interval = 1000
+                    }
+                };
+            }
         }
 
-        public void Disable()
-        {
-            if (!Enabled) Clear();
-            Enabled = false;
-        }
-
-        public void Clear()
+        public override void AfterDisabled()
         {
             foreach (var timer in _timers)
             {
@@ -144,16 +102,16 @@ namespace Mitmeo.D3.App.ViewModels
             _timers.Clear();
         }
 
-        public void Run()
+        public override void AfterEnabled()
         {
             var engine = Engine.Current;
             if (engine == null) return;
 
             var player = ActorCommonData.Local;
 
-            if (player == null || Keys == null || !Keys.Any()) return;
+            if (player == null || Configuration == null || !Configuration.Any()) return;
 
-            foreach (var key in Keys)
+            foreach (var key in Configuration)
             {
                 if (key.Interval <= 0) continue;
 
@@ -183,29 +141,10 @@ namespace Mitmeo.D3.App.ViewModels
             }
         }
 
-        private IEnumerable<SendKeyModel> LoadSaveFile(bool useDefault = true)
+        public override void Save()
         {
-            Disable();
-
-            var savedKeys = new Serialiser().ReadFromBinaryFile<SendKeyModel[]>(SAVE_FILE);
-            if (savedKeys == null && useDefault)
-            {
-                savedKeys = new SendKeyModel[]
-                {
-                    new SendKeyModel
-                    {
-                        Code = VirtualKeyCode.VK_1,
-                        Interval = 1000
-                    },
-                    new SendKeyModel
-                    {
-                        Code = VirtualKeyCode.VK_2,
-                        Interval = 1000
-                    }
-                };
-            }
-
-            return savedKeys;
+            base.Save();
+            MessageBox.Show("Your key setup is saved.", "INFO", MessageBoxButton.OK);
         }
     }
 }

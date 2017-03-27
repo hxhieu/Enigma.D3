@@ -62,7 +62,7 @@
                 </TabItem.Header>
 
                 <StackPanel>
-                    <ListView ItemsSource="{Binding SendKeys.Keys}">
+                    <ListView ItemsSource="{Binding SendKeys.Configuration}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="#" Width="Auto">

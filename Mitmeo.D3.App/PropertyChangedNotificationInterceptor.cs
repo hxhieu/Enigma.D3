@@ -9,18 +9,18 @@ namespace Mitmeo.D3.App
         {
             onPropertyChangedAction();
 
-            var sendKey = target as SendKeyViewModel;
-            if (sendKey != null)
+            var model = target as ViewModelBase;
+            if (model != null)
             {
                 if (propertyName == "Enabled")
                 {
-                    if (sendKey.Enabled)
+                    if (model.Enabled)
                     {
-                        sendKey.Run();
+                        model.AfterEnabled();
                     }
                     else
                     {
-                        sendKey.Clear();
+                        model.AfterDisabled();
                     }
                 }
             }

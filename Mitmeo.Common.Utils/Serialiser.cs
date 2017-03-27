@@ -30,6 +30,7 @@ namespace Mitmeo.Common.Utils
         /// <returns>Returns a new instance of the object read from the binary file.</returns>
         public T ReadFromBinaryFile<T>(string filePath)
         {
+            if (!File.Exists(filePath)) return default(T);
             using (Stream stream = File.Open(filePath, FileMode.Open))
             {
                 var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();

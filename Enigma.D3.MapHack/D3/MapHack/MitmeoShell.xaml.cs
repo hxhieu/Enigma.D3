@@ -76,7 +76,7 @@ namespace Enigma.D3.MapHack
 
         public void Init(Engine engine = null)
         {
-            SendKeys = new SendKeyViewModel();
+            SendKeys = new SendKeyViewModel("keys.db");
         }
 
         private void Refresh(string propertyName)
