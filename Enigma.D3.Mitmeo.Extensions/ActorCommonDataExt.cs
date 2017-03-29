@@ -1,7 +1,11 @@
-﻿using Enigma.D3.Enums;
+﻿using Enigma.D3.Collections;
+using Enigma.D3.Enums;
 using Enigma.D3.Helpers;
+using Enigma.D3.Mitmeo.Extensions.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Enigma.D3.Mitmeo.Extensions
 {
@@ -73,6 +77,43 @@ namespace Enigma.D3.Mitmeo.Extensions
         public static double GetResourcePct(this ActorCommonData acd)
         {
             return (GetResourceCurrent(acd) / GetResourceMax(acd)) * 100;
+        }
+
+        public static async Task<IEnumerable<ActivePower>> GetActivePowers(this ActorCommonData acd, int? powerSnoId = null, AttributeId attrId = AttributeId.AxeBadData, bool hasValue = true)
+        {
+            return await Task.Run(() =>
+            {
+                if (acd == null) return null;
+
+                var attributes = new List<Map<int, AttributeValue>.Entry>(acd.EnumerateAttributes());
+
+                var result = attributes.Select(x => new ActivePower
+                {
+                    AttrId = x.x04_Key & 0xFFF,
+                    SnoId = x.x04_Key >> 12,
+                    Value = x.x08_Value.Int32
+                });
+
+                if (powerSnoId.HasValue) result = result.Where(x => x.SnoId == powerSnoId);
+                if (hasValue) result = result.Where(x => x.Value > 0);
+                if (attrId != AttributeId.AxeBadData) result = result.Where(x => x.AttrId == (int)attrId);
+
+                return result;
+            });
+        }
+
+        public static async Task<float> GetCurrentHp(this ActorCommonData acd)
+        {
+            return await Task.Run(() =>
+            {
+                return Attributes.HitpointsCur.GetValue(acd);
+            });
+        }
+
+        public static async Task<bool> HasBuff(this ActorCommonData acd, int powerSnoId, int attrId)
+        {
+            var activePowers = await acd.GetActivePowers(powerSnoId);
+            return activePowers != null && activePowers.FirstOrDefault() != null;
         }
     }
 }

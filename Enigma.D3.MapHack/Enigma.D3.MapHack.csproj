@@ -156,6 +156,10 @@
       <Project>{23848103-7dc0-4ab0-958f-b8793ffd1f2d}</Project>
       <Name>Enigma.D3.Memory</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Enigma.D3.Mitmeo.Extensions\Enigma.D3.Mitmeo.Extensions.csproj">
+      <Project>{875ba5d9-303c-4053-9ca1-d142a3052c2a}</Project>
+      <Name>Enigma.D3.Mitmeo.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Enigma.Memory\Enigma.Memory.csproj">
       <Project>{3A385F29-42E2-4CAF-B1F2-2A1A7B90A971}</Project>
       <Name>Enigma.Memory</Name>

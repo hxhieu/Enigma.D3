@@ -41,7 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActorCommonDataExt.cs" />
+    <Compile Include="Buffs\ConventionOfElements.cs" />
+    <Compile Include="Buffs\IBuff.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Models\ActivePower.cs" />
+    <Compile Include="Models\Avatar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Enigma.D3.Core\Enigma.D3.Core.csproj">

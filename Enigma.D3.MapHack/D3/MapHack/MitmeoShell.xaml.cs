@@ -1,8 +1,12 @@
 ﻿using Enigma.D3.MapHack.Markers;
+using Enigma.D3.Mitmeo.Extensions;
+using Enigma.D3.Mitmeo.Extensions.Enums;
+using Enigma.D3.Mitmeo.Extensions.Models;
 using Mitmeo.D3.App.Commands;
 using Mitmeo.D3.App.ViewModels;
 using PropertyChanged;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -22,6 +26,7 @@ namespace Enigma.D3.MapHack
         public bool IsAttached { get; set; }
         public double ShellHeight { get; private set; } = SHELL_MAXIMISE;
         public string ToggleButtonText { get; private set; } = "-";
+        public string TestText { get; private set; }
 
         private ICommand _toggleSizeCommand;
         public ICommand ToggleSizeCommand
@@ -32,16 +37,19 @@ namespace Enigma.D3.MapHack
                 {
                     _toggleSizeCommand = new RelayCommand(x => true, x =>
                     {
-                        if (ShellHeight <= SHELL_MINIMISE)
-                        {
-                            ShellHeight = SHELL_MAXIMISE;
-                            ToggleButtonText = "-";
-                        }
-                        else
-                        {
-                            ShellHeight = SHELL_MINIMISE;
-                            ToggleButtonText = "+";
-                        }
+
+                        Test().RunOnMainThread();
+                        
+                        //if (ShellHeight <= SHELL_MINIMISE)
+                        //{
+                        //    ShellHeight = SHELL_MAXIMISE;
+                        //    ToggleButtonText = "-";
+                        //}
+                        //else
+                        //{
+                        //    ShellHeight = SHELL_MINIMISE;
+                        //    ToggleButtonText = "+";
+                        //}
 
                     });
                 }
@@ -57,6 +65,11 @@ namespace Enigma.D3.MapHack
 
             DataContext = this;
             InitializeComponent();
+        }
+
+        private async Task Test()
+        {
+            TestText = await Avatar.Current.GetBuff(Powers.Convention_PowerSno).GetCurrent<string>();
         }
     }
 }
