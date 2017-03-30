@@ -5,7 +5,6 @@ using Enigma.D3.Mitmeo.Extensions.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Enigma.D3.Mitmeo.Extensions
 {
@@ -79,40 +78,34 @@ namespace Enigma.D3.Mitmeo.Extensions
             return (GetResourceCurrent(acd) / GetResourceMax(acd)) * 100;
         }
 
-        public static async Task<IEnumerable<ActivePower>> GetActivePowers(this ActorCommonData acd, int? powerSnoId = null, AttributeId attrId = AttributeId.AxeBadData, bool hasValue = true)
+        public static IEnumerable<ActivePower> GetActivePowers(this ActorCommonData acd, int? powerSnoId = null, AttributeId attrId = AttributeId.AxeBadData, bool hasValue = true)
         {
-            return await Task.Run(() =>
+            if (acd == null) return null;
+
+            var attributes = new List<Map<int, AttributeValue>.Entry>(acd.EnumerateAttributes());
+
+            var result = attributes.Select(x => new ActivePower
             {
-                if (acd == null) return null;
-
-                var attributes = new List<Map<int, AttributeValue>.Entry>(acd.EnumerateAttributes());
-
-                var result = attributes.Select(x => new ActivePower
-                {
-                    AttrId = x.x04_Key & 0xFFF,
-                    SnoId = x.x04_Key >> 12,
-                    Value = x.x08_Value.Int32
-                });
-
-                if (powerSnoId.HasValue) result = result.Where(x => x.SnoId == powerSnoId);
-                if (hasValue) result = result.Where(x => x.Value > 0);
-                if (attrId != AttributeId.AxeBadData) result = result.Where(x => x.AttrId == (int)attrId);
-
-                return result;
+                AttrId = x.x04_Key & 0xFFF,
+                SnoId = x.x04_Key >> 12,
+                Value = x.x08_Value.Int32
             });
+
+            if (powerSnoId.HasValue) result = result.Where(x => x.SnoId == powerSnoId);
+            if (hasValue) result = result.Where(x => x.Value > 0);
+            if (attrId != AttributeId.AxeBadData) result = result.Where(x => x.AttrId == (int)attrId);
+
+            return result;
         }
 
-        public static async Task<float> GetCurrentHp(this ActorCommonData acd)
+        public static float GetCurrentHp(this ActorCommonData acd)
         {
-            return await Task.Run(() =>
-            {
-                return Attributes.HitpointsCur.GetValue(acd);
-            });
+            return Attributes.HitpointsCur.GetValue(acd);
         }
 
-        public static async Task<bool> HasBuff(this ActorCommonData acd, int powerSnoId, int attrId)
+        public static bool HasBuff(this ActorCommonData acd, int powerSnoId, int attrId)
         {
-            var activePowers = await acd.GetActivePowers(powerSnoId);
+            var activePowers = acd.GetActivePowers(powerSnoId);
             return activePowers != null && activePowers.FirstOrDefault() != null;
         }
     }

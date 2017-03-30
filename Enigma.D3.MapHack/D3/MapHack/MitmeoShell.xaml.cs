@@ -1,12 +1,11 @@
-﻿using Enigma.D3.MapHack.Markers;
-using Enigma.D3.Mitmeo.Extensions;
+﻿using Enigma.D3.Enums;
+using Enigma.D3.MapHack.Markers;
 using Enigma.D3.Mitmeo.Extensions.Enums;
 using Enigma.D3.Mitmeo.Extensions.Models;
 using Mitmeo.D3.App.Commands;
 using Mitmeo.D3.App.ViewModels;
 using PropertyChanged;
 using System;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -38,8 +37,8 @@ namespace Enigma.D3.MapHack
                     _toggleSizeCommand = new RelayCommand(x => true, x =>
                     {
 
-                        Test().RunOnMainThread();
-                        
+                        Test();
+
                         //if (ShellHeight <= SHELL_MINIMISE)
                         //{
                         //    ShellHeight = SHELL_MAXIMISE;
@@ -67,9 +66,11 @@ namespace Enigma.D3.MapHack
             InitializeComponent();
         }
 
-        private async Task Test()
+        private void Test()
         {
-            TestText = await Avatar.Current.GetBuff(Powers.Convention_PowerSno).GetCurrent<string>();
+            var buff = Avatar.Current.GetBuff(Powers.Convention_PowerSno);
+            var remain = buff.GetRemain(DamageType.Physical.ToString());
+            TestText = $"{remain}";
         }
     }
 }

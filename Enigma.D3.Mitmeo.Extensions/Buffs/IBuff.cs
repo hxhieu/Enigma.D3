@@ -6,7 +6,7 @@ namespace Enigma.D3.Mitmeo.Extensions.Buffs
     {
         int PowerSnoId { get; }
         string Name { get; }
-        Task<float> GetRemain();
-        Task<T> GetCurrent<T>();
+        double GetRemain(string buff = null, int dp = 1);
+        string GetCurrent();
     }
 }
