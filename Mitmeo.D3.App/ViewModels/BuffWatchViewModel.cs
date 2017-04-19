@@ -16,7 +16,7 @@ namespace Mitmeo.D3.App.ViewModels
         public bool CoE { get; set; } = true;
         public DamageType SelectedCoE { get; set; }
         public IEnumerable<DamageType> Elements { get; set; } = ConventionOfElements.GetHeroElements();
-        public int CoEPosX { get; set; } = 930;
+        public int CoEPosX { get; set; } = 860;
         public int CoEPosY { get; set; } = 540;
 
         private readonly Overlay _overlay;
@@ -44,7 +44,8 @@ namespace Mitmeo.D3.App.ViewModels
         private object GetCoE()
         {
             var coe = Avatar.Current.GetBuff(Powers.Convention_PowerSno);
-            return coe.GetRemain(SelectedCoE.ToString(), 0);
+            var remain = coe.GetRemain(SelectedCoE.ToString(), 0);
+            return remain;
         }
     }
 }

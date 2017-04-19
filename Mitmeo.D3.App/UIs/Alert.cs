@@ -8,11 +8,12 @@ namespace Mitmeo.D3.App.UIs
 {
     public class AlertSettings
     {
-        public double UpdateInterval { get; set; } = 1000d;
+        public double UpdateInterval { get; set; } = 500;
         public int Size { get; set; } = 50;
         public Brush Colour { get; set; } = Brushes.White;
         public Rect Position { get; set; }
         public FontWeight Weight { get; set; } = FontWeights.Heavy;
+        public int Width { get; set; } = 200;
     }
 
     public class Alert : Label
@@ -28,6 +29,8 @@ namespace Mitmeo.D3.App.UIs
             Foreground = _settings.Colour;
             FontWeight = _settings.Weight;
             Content = content;
+            HorizontalContentAlignment = HorizontalAlignment.Center;
+            Width = _settings.Width;
 
             UseUpdate(update);
         }
