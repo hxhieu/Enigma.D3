@@ -106,6 +106,10 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Enigma.D3.Core\Enigma.D3.Core.csproj">
+      <Project>{E01F9C34-F404-48DC-92E2-991DA7ADF9EB}</Project>
+      <Name>Enigma.D3.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Enigma.D3.Memory\Enigma.D3.Memory.csproj">
       <Project>{23848103-7DC0-4AB0-958F-B8793FFD1F2D}</Project>
       <Name>Enigma.D3.Memory</Name>

@@ -1,5 +1,8 @@
 ﻿using Enigma.D3;
+using Enigma.D3.Enums;
 using Enigma.D3.Mitmeo.Extensions;
+using Enigma.D3.Mitmeo.Extensions.Enums;
+using Enigma.D3.Mitmeo.Extensions.Models;
 using Mitmeo.D3.App.Commands;
 using Mitmeo.D3.App.Core;
 using Mitmeo.D3.App.Models;
@@ -74,7 +77,7 @@ namespace Mitmeo.D3.App.ViewModels
             }
         }
 
-        public SendKeyViewModel(string saveFileName): base(saveFileName)
+        public SendKeyViewModel(string saveFileName) : base(saveFileName)
         {
             _timers = new List<Timer>();
             _input = new InputSimulator();
@@ -105,12 +108,7 @@ namespace Mitmeo.D3.App.ViewModels
 
         public override void AfterEnabled()
         {
-            var engine = Engine.Current;
-            if (engine == null) return;
-
-            var player = ActorCommonData.Local;
-
-            if (player == null || Configuration == null || !Configuration.Any()) return;
+            if (Configuration == null || !Configuration.Any()) return;
 
             foreach (var key in Configuration)
             {
@@ -119,18 +117,27 @@ namespace Mitmeo.D3.App.ViewModels
                 var timer = new Timer(key.Interval);
                 timer.Elapsed += (s, e) =>
                 {
+                    if (!IsReady)
+                    {
+                        Enabled = false;
+                        return;
+                    }
+
                     //Disable
                     if (!Enabled) return;
 
                     //D3 window only
                     var currentHandle = Win32Interop.GetForegroundWindow();
-                    if (currentHandle != engine.Process.MainWindowHandle) return;
+                    if (currentHandle != Engine.Current.Process.MainWindowHandle) return;
+
+                    //Not in town
+                    if (Avatar.Current.HasBuff(Powers.InTownBuff, (int)AttributeId.BuffIconCount0)) return;
 
                     //Enough Resources
-                    if (player.GetResourcePct() < key.ResourcePct) return;
+                    if (ActorCommonData.Local.GetResourcePct() < key.ResourcePct) return;
 
                     //Monster count
-                    if (!player.HasMonstersWithin(key.RangeCheck, key.MonsterWithin)) return;
+                    if (!ActorCommonData.Local.HasMonstersWithin(key.RangeCheck, key.MonsterWithin)) return;
 
                     //Now send key
                     _input.Keyboard.KeyPress(key.Code);

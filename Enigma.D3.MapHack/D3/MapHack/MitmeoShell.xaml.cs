@@ -6,6 +6,7 @@ using Mitmeo.D3.App.Commands;
 using Mitmeo.D3.App.ViewModels;
 using PropertyChanged;
 using System;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 
@@ -37,18 +38,16 @@ namespace Enigma.D3.MapHack
                     _toggleSizeCommand = new RelayCommand(x => true, x =>
                     {
 
-                        Test();
-
-                        //if (ShellHeight <= SHELL_MINIMISE)
-                        //{
-                        //    ShellHeight = SHELL_MAXIMISE;
-                        //    ToggleButtonText = "-";
-                        //}
-                        //else
-                        //{
-                        //    ShellHeight = SHELL_MINIMISE;
-                        //    ToggleButtonText = "+";
-                        //}
+                        if (ShellHeight <= SHELL_MINIMISE)
+                        {
+                            ShellHeight = SHELL_MAXIMISE;
+                            ToggleButtonText = "-";
+                        }
+                        else
+                        {
+                            ShellHeight = SHELL_MINIMISE;
+                            ToggleButtonText = "+";
+                        }
 
                     });
                 }
@@ -57,6 +56,8 @@ namespace Enigma.D3.MapHack
             }
         }
 
+        private readonly Timer _testTimer;
+
         public MitmeoShell()
         {
             Options = MapMarkerOptions.Instance;
@@ -64,12 +65,18 @@ namespace Enigma.D3.MapHack
 
             DataContext = this;
             InitializeComponent();
+            _testTimer = new Timer(1000);
+            _testTimer.Elapsed += (s, e) =>
+            {
+                Test();
+            };
+            _testTimer.Start();
         }
 
         private void Test()
         {
             var buff = Avatar.Current.GetBuff(Powers.Convention_PowerSno);
-            var remain = buff.GetRemain(DamageType.Physical.ToString());
+            var remain = buff.GetRemain(DamageType.Physical.ToString(), 0);
             TestText = $"{remain}";
         }
     }

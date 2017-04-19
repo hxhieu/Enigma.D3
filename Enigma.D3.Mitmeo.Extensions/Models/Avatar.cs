@@ -14,7 +14,6 @@ namespace Enigma.D3.Mitmeo.Extensions.Models
 
         public Avatar()
         {
-            var acd = ActorCommonData.Local;
             _buff = new List<IBuff>
             {
                 new ConventionOfElements(() => ActorCommonData.Local)
@@ -24,6 +23,12 @@ namespace Enigma.D3.Mitmeo.Extensions.Models
         public IBuff GetBuff(int powerSnoId)
         {
             return _buff.FirstOrDefault(x => x.PowerSnoId == powerSnoId);
+        }
+
+        public bool HasBuff(int powerSnoId, int attrId)
+        {
+            var activePowers = ActorCommonData.Local.GetActivePowers(powerSnoId);
+            return activePowers != null && activePowers.FirstOrDefault() != null;
         }
     }
 }

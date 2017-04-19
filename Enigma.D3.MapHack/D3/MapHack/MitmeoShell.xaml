@@ -43,7 +43,6 @@
                     <CheckBox Content="Show Monsters" IsChecked="{Binding Options.ShowMonsters}" Margin="10,5" FontSize="10" />
                     <CheckBox Content="Show Chests" IsChecked="{Binding Options.ShowChests}" Margin="10,5" FontSize="10" />
                     <CheckBox Content="Show Wreckables" IsChecked="{Binding Options.ShowWreckables}" Margin="10,5" FontSize="10" />
-                    <TextBlock Text="{Binding TestText}"/>
                 </StackPanel>
             </TabItem>
             <TabItem x:Name="tabBuffsWatch">
@@ -53,6 +52,9 @@
                         <TextBlock Text="Buff Watch" FontSize="10"/>
                     </StackPanel>
                 </TabItem.Header>
+                <StackPanel>
+                    <TextBlock Text="{Binding TestText}" />
+                </StackPanel>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
