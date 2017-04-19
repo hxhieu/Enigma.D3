@@ -87,6 +87,7 @@
     <Compile Include="UIs\Overlay.cs" />
     <Compile Include="UIs\UIPosition.cs" />
     <Compile Include="ViewModels\Base\SaveableViewModel.cs" />
+    <Compile Include="ViewModels\BuffWatchViewModel.cs" />
     <Compile Include="ViewModels\SendKeyViewModel.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

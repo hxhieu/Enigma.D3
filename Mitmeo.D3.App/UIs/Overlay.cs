@@ -27,8 +27,13 @@ namespace Mitmeo.D3.App.UIs
         public void Add(UIElement element, Point point)
         {
             _root.Children.Add(element);
-            Canvas.SetTop(element, point.X);
-            Canvas.SetLeft(element, point.Y);
+            Canvas.SetTop(element, point.Y);
+            Canvas.SetLeft(element, point.X);
+        }
+
+        public void Clear()
+        {
+            _root.Children.Clear();
         }
     }
 }

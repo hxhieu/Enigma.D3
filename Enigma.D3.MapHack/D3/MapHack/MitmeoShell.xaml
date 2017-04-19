@@ -32,29 +32,23 @@
             </Border>
         </StackPanel>
         <TabControl>
-            <TabItem x:Name="tabMapHack">
+            <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Margin="0,0,4,0" IsChecked="True"/>
-                        <TextBlock Text="Map Hack" FontSize="10"/>
-                    </StackPanel>
-                </TabItem.Header>
-                <StackPanel>
-                    <CheckBox Content="Show Monsters" IsChecked="{Binding Options.ShowMonsters}" Margin="10,5" FontSize="10" />
-                    <CheckBox Content="Show Chests" IsChecked="{Binding Options.ShowChests}" Margin="10,5" FontSize="10" />
-                    <CheckBox Content="Show Wreckables" IsChecked="{Binding Options.ShowWreckables}" Margin="10,5" FontSize="10" />
-                </StackPanel>
-            </TabItem>
-            <TabItem x:Name="tabBuffsWatch">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Margin="0,0,4,0" IsChecked="True"/>
+                        <CheckBox Margin="0,0,4,0" IsChecked="{Binding BuffWatcher.Enabled}"/>
                         <TextBlock Text="Buff Watch" FontSize="10"/>
                     </StackPanel>
                 </TabItem.Header>
-                <StackPanel>
-                    <TextBlock Text="{Binding TestText}" />
-                </StackPanel>
+                <Border Padding="5">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox Margin="0,5,20,0" IsChecked="{Binding BuffWatcher.CoE}" Content="CoE"/>
+                            <ComboBox ItemsSource="{Binding BuffWatcher.Elements}" SelectedValue="{Binding BuffWatcher.SelectedCoE}" Width="100"></ComboBox>
+                            <TextBox Text="{Binding BuffWatcher.CoEPosX}" Width="60" Margin="10,0"/>
+                            <TextBox Text="{Binding BuffWatcher.CoEPosY}" Width="60"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
@@ -127,8 +121,7 @@
                     </DockPanel>
                 </StackPanel>
             </TabItem>
-
-            <TabItem>
+            <TabItem Visibility="Hidden">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Settings" FontSize="10"/>
@@ -138,7 +131,19 @@
 
                 </Grid>
             </TabItem>
-
+            <TabItem Visibility="Hidden">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Margin="0,0,4,0" IsChecked="True"/>
+                        <TextBlock Text="Map Hack" FontSize="10"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel>
+                    <CheckBox Content="Show Monsters" IsChecked="{Binding Options.ShowMonsters}" Margin="10,5" FontSize="10" />
+                    <CheckBox Content="Show Chests" IsChecked="{Binding Options.ShowChests}" Margin="10,5" FontSize="10" />
+                    <CheckBox Content="Show Wreckables" IsChecked="{Binding Options.ShowWreckables}" Margin="10,5" FontSize="10" />
+                </StackPanel>
+            </TabItem>
         </TabControl>
     </StackPanel>
 </Window>

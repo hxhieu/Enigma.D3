@@ -9,9 +9,10 @@ namespace Mitmeo.D3.App.UIs
     public class AlertSettings
     {
         public double UpdateInterval { get; set; } = 1000d;
-        public int Size { get; set; } = 40;
+        public int Size { get; set; } = 50;
         public Brush Colour { get; set; } = Brushes.White;
         public Rect Position { get; set; }
+        public FontWeight Weight { get; set; } = FontWeights.Heavy;
     }
 
     public class Alert : Label
@@ -25,12 +26,13 @@ namespace Mitmeo.D3.App.UIs
 
             FontSize = _settings.Size;
             Foreground = _settings.Colour;
+            FontWeight = _settings.Weight;
             Content = content;
 
-            SetUpdate(update);
+            UseUpdate(update);
         }
 
-        public void SetUpdate(Func<object> update)
+        public void UseUpdate(Func<object> update)
         {
             if (update == null) return;
 

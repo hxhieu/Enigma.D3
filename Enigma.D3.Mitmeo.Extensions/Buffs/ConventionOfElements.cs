@@ -18,6 +18,11 @@ namespace Enigma.D3.Mitmeo.Extensions.Buffs
             {HeroClass.Wizard, new DamageType[] {DamageType.Arcane, DamageType.Cold, DamageType.Fire, DamageType.Lightning}}
         };
 
+        public static List<DamageType> GetHeroElements()
+        {
+            return _classElements[PlayerData.Local.GetHeroClass()].ToList();
+        }
+
         private static readonly Dictionary<DamageType, AttributeId> _elementBuffAttributes = new Dictionary<DamageType, AttributeId>
         {
             { DamageType.Arcane,    AttributeId.BuffIconCount1 },
@@ -102,7 +107,7 @@ namespace Enigma.D3.Mitmeo.Extensions.Buffs
             if (buff == null) return Math.Round(currentRemain, dp);
             else
             {
-                var heroElements = _classElements[PlayerData.Local.GetHeroClass()].ToList();
+                var heroElements = GetHeroElements();
                 var type = (DamageType)Enum.Parse(typeof(DamageType), buff);
 
                 var currentIndex = heroElements.FindIndex(x => x == current);

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Windows.Controls;
+﻿using Enigma.D3.MapHack;
 using Enigma.Wpf;
-using Enigma.D3.MapHack;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace Enigma.D3.Bootloader
 {
@@ -33,11 +29,11 @@ namespace Enigma.D3.Bootloader
                     using (var watcher = new WatcherThread(engine))
                     {
                         MitmeoShell.Instance.IsAttached = true;
-                        Minimap minimap = null;
+                        //Minimap minimap = null;
                         OverlayWindow overlay = null;
                         Execute.OnUIThread(() =>
                         {
-                            MitmeoShell.Instance.CustomOverlay(engine);
+                            MitmeoShell.Instance.Init(engine);
 
                             //Canvas canvas = new Canvas();
                             //overlay = OverlayWindow.Create(engine.Process, canvas);

@@ -1,9 +1,5 @@
-﻿using Enigma.D3.Enums;
-using Enigma.D3.MapHack.Markers;
-using Enigma.D3.Mitmeo.Extensions.Enums;
-using Enigma.D3.Mitmeo.Extensions.Models;
+﻿using Enigma.D3.MapHack.Markers;
 using Mitmeo.D3.App.Commands;
-using Mitmeo.D3.App.UIs;
 using Mitmeo.D3.App.ViewModels;
 using PropertyChanged;
 using System;
@@ -22,6 +18,7 @@ namespace Enigma.D3.MapHack
         public static MitmeoShell Instance { get { return _lazyInstance.Value; } }
 
         public SendKeyViewModel SendKeys { get; private set; }
+        public BuffWatchViewModel BuffWatcher { get; private set; }
         public MapMarkerOptions Options { get; private set; }
         public bool IsAttached { get; set; }
         public double ShellHeight { get; private set; } = SHELL_MAXIMISE;
@@ -58,26 +55,15 @@ namespace Enigma.D3.MapHack
 
         public MitmeoShell()
         {
-            Options = MapMarkerOptions.Instance;
-            SendKeys = new SendKeyViewModel("keys.db");
-
             DataContext = this;
             InitializeComponent();
         }
 
-        private string Test()
+        public void Init(Engine engine)
         {
-            var buff = Avatar.Current.GetBuff(Powers.Convention_PowerSno);
-            var remain = buff.GetRemain(DamageType.Physical.ToString(), 0);
-            return remain.ToString();
-        }
-
-        public void CustomOverlay(Engine engine)
-        {
-            var alert = new Overlay();
-            alert.Add(new Alert("COE", Test), new Point(100, 100));
-
-            alert.Show();
+            Options = MapMarkerOptions.Instance;
+            SendKeys = new SendKeyViewModel("keys.db");
+            BuffWatcher = new BuffWatchViewModel();
         }
     }
 }
