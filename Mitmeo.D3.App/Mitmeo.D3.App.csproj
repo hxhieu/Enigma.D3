@@ -83,6 +83,9 @@
     </Compile>
     <Compile Include="Models\SendKeyModel.cs" />
     <Compile Include="PropertyChangedNotificationInterceptor.cs" />
+    <Compile Include="UIs\Alert.cs" />
+    <Compile Include="UIs\Overlay.cs" />
+    <Compile Include="UIs\UIPosition.cs" />
     <Compile Include="ViewModels\Base\SaveableViewModel.cs" />
     <Compile Include="ViewModels\SendKeyViewModel.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />

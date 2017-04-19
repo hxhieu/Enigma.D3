@@ -37,12 +37,14 @@ namespace Enigma.D3.Bootloader
                         OverlayWindow overlay = null;
                         Execute.OnUIThread(() =>
                         {
-                            Canvas canvas = new Canvas();
-                            overlay = OverlayWindow.Create(engine.Process, canvas);
-                            overlay.Show();
-                            minimap = new Minimap(canvas);
+                            MitmeoShell.Instance.CustomOverlay(engine);
+
+                            //Canvas canvas = new Canvas();
+                            //overlay = OverlayWindow.Create(engine.Process, canvas);
+                            //overlay.Show();
+                            //minimap = new Minimap(canvas);
                         });
-                        watcher.AddTask(minimap.Update);
+                        //watcher.AddTask(minimap.Update);
                         watcher.Start();
                         engine.Process.WaitForExit();
                         Execute.OnUIThread(() => overlay.Close());

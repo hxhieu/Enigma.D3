@@ -3,10 +3,10 @@ using Enigma.D3.MapHack.Markers;
 using Enigma.D3.Mitmeo.Extensions.Enums;
 using Enigma.D3.Mitmeo.Extensions.Models;
 using Mitmeo.D3.App.Commands;
+using Mitmeo.D3.App.UIs;
 using Mitmeo.D3.App.ViewModels;
 using PropertyChanged;
 using System;
-using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 
@@ -56,8 +56,6 @@ namespace Enigma.D3.MapHack
             }
         }
 
-        private readonly Timer _testTimer;
-
         public MitmeoShell()
         {
             Options = MapMarkerOptions.Instance;
@@ -65,19 +63,21 @@ namespace Enigma.D3.MapHack
 
             DataContext = this;
             InitializeComponent();
-            _testTimer = new Timer(1000);
-            _testTimer.Elapsed += (s, e) =>
-            {
-                Test();
-            };
-            _testTimer.Start();
         }
 
-        private void Test()
+        private string Test()
         {
             var buff = Avatar.Current.GetBuff(Powers.Convention_PowerSno);
             var remain = buff.GetRemain(DamageType.Physical.ToString(), 0);
-            TestText = $"{remain}";
+            return remain.ToString();
+        }
+
+        public void CustomOverlay(Engine engine)
+        {
+            var alert = new Overlay();
+            alert.Add(new Alert("COE", Test), new Point(100, 100));
+
+            alert.Show();
         }
     }
 }
