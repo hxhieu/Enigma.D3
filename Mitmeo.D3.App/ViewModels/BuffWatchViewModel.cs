@@ -34,6 +34,7 @@ namespace Mitmeo.D3.App.ViewModels
 
         public override void AfterEnabled()
         {
+            Elements = ConventionOfElements.GetHeroElements();
             if (CoE)
             {
                 _overlay.Add(new Alert("CoE", GetCoE), new Point(CoEPosX, CoEPosY));
@@ -43,6 +44,12 @@ namespace Mitmeo.D3.App.ViewModels
 
         private object GetCoE()
         {
+            if (!IsReady)
+            {
+                Enabled = false;
+                return null;
+            }
+
             var coe = Avatar.Current.GetBuff(Powers.Convention_PowerSno);
             var remain = coe.GetRemain(SelectedCoE.ToString(), 0);
             return remain;

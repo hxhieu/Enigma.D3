@@ -20,6 +20,7 @@ namespace Enigma.D3.Mitmeo.Extensions.Buffs
 
         public static List<DamageType> GetHeroElements()
         {
+            if (PlayerData.Local == null || !_classElements.ContainsKey(PlayerData.Local.GetHeroClass())) return null;
             return _classElements[PlayerData.Local.GetHeroClass()].ToList();
         }
 

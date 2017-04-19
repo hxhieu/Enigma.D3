@@ -43,7 +43,7 @@ namespace Enigma.D3.Bootloader
                         //watcher.AddTask(minimap.Update);
                         watcher.Start();
                         engine.Process.WaitForExit();
-                        Execute.OnUIThread(() => overlay.Close());
+                        //Execute.OnUIThread(() => overlay.Close());
                     }
                     MitmeoShell.Instance.IsAttached = false;
                     //Execute.OnUIThread(() => MainWindow.Close());
