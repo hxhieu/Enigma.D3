@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Windows.Controls;
-using Enigma.Wpf;
-using Enigma.D3.MapHack;
+﻿using Enigma.D3.MapHack;
 using Enigma.D3.MemoryModel;
-using System.Diagnostics;
 using Enigma.Memory;
+using Enigma.Wpf;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Enigma.D3.Bootloader
 {
@@ -34,7 +30,7 @@ namespace Enigma.D3.Bootloader
                     using (var watcher = new WatcherThread(ctx))
                     {
                         //Shell.Instance.IsAttached = true;
-                        MitmeoShell.Instance.IsAttached = true;
+                        MitmeoShell.Instance.Start(ctx);
                         Minimap minimap = null;
                         OverlayWindow overlay = null;
                         Execute.OnUIThread(() =>
@@ -50,7 +46,7 @@ namespace Enigma.D3.Bootloader
                         Execute.OnUIThread(() => overlay.Close());
                     }
                     //Shell.Instance.IsAttached = false;
-                    MitmeoShell.Instance.IsAttached = false;
+                    MitmeoShell.Instance.Stop();
                 }
             }, TaskCreationOptions.LongRunning);
         }

@@ -1,4 +1,6 @@
 ﻿using Enigma.D3.MapHack.Markers;
+using Enigma.D3.MemoryModel;
+using Enigma.D3.Mitmeo.Extensions.Models;
 using Mitmeo.D3.App.Commands;
 using Mitmeo.D3.App.ViewModels;
 using PropertyChanged;
@@ -11,7 +13,7 @@ namespace Enigma.D3.MapHack
     [ImplementPropertyChanged]
     public partial class MitmeoShell : Window
     {
-        private const double SHELL_MINIMISE = 82;
+        private const double SHELL_MINIMISE = 72;
         private const double SHELL_MAXIMISE = double.PositiveInfinity;
 
         private static readonly Lazy<MitmeoShell> _lazyInstance = new Lazy<MitmeoShell>(() => new MitmeoShell());
@@ -60,6 +62,17 @@ namespace Enigma.D3.MapHack
             BuffWatcher = new BuffWatchViewModel();
             DataContext = this;
             InitializeComponent();
+        }
+
+        public void Start(MemoryContext ctx)
+        {
+            IsAttached = true;
+            Avatar.Current.Init(ctx);
+        }
+
+        public void Stop()
+        {
+            IsAttached = false;
         }
     }
 }

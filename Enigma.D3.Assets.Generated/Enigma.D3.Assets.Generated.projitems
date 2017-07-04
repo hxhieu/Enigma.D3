@@ -66,8 +66,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)TreasureClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tutorial.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Weather.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Vibrations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Weather.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Worlds.cs" />
   </ItemGroup>
 </Project>

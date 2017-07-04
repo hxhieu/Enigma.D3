@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ACDEx.cs" />
     <Compile Include="ActorCommonDataExt.cs" />
     <Compile Include="Buffs\ConventionOfElements.cs" />
     <Compile Include="Buffs\IBuff.cs" />
@@ -50,9 +51,17 @@
     <Compile Include="TaskExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Enigma.D3.ApplicationModel\Enigma.D3.ApplicationModel.csproj">
+      <Project>{176ae261-7d74-4959-966e-d1963cfefd66}</Project>
+      <Name>Enigma.D3.ApplicationModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Enigma.D3.Core\Enigma.D3.Core.csproj">
       <Project>{e01f9c34-f404-48dc-92e2-991da7adf9eb}</Project>
       <Name>Enigma.D3.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Enigma.D3.MemoryModel\Enigma.D3.MemoryModel.csproj">
+      <Project>{92e7130d-9363-458c-abe5-a71f240a9b78}</Project>
+      <Name>Enigma.D3.MemoryModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\Enigma.D3.Memory\Enigma.D3.Memory.csproj">
       <Project>{23848103-7dc0-4ab0-958f-b8793ffd1f2d}</Project>

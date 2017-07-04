@@ -1,15 +1,13 @@
-﻿using Enigma.D3;
-using Enigma.D3.Enums;
-using Enigma.D3.Mitmeo.Extensions;
-using Enigma.D3.Mitmeo.Extensions.Enums;
-using Enigma.D3.Mitmeo.Extensions.Models;
+﻿using Enigma.D3.Mitmeo.Extensions.Models;
 using Mitmeo.D3.App.Commands;
 using Mitmeo.D3.App.Core;
 using Mitmeo.D3.App.Models;
 using Mitmeo.D3.App.ViewModels.Base;
 using PropertyChanged;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 using System.Windows;
@@ -26,6 +24,8 @@ namespace Mitmeo.D3.App.ViewModels
         private readonly InputSimulator _input;
 
         public override ObservableCollection<SendKeyModel> Configuration { get; set; }
+
+        private IntPtr _d3ProcessHandle;
 
         private ICommand _addKeyCommand;
         public ICommand AddKeyCommand
@@ -93,6 +93,11 @@ namespace Mitmeo.D3.App.ViewModels
                     }
                 };
             }
+
+            var process = Process.GetProcessesByName("Diablo III64").FirstOrDefault();
+            if (process == null)
+                process = Process.GetProcessesByName("Diablo III").FirstOrDefault();
+            _d3ProcessHandle = process.MainWindowHandle;
         }
 
         public override void AfterDisabled()
@@ -128,16 +133,16 @@ namespace Mitmeo.D3.App.ViewModels
 
                     //D3 window only
                     var currentHandle = Win32Interop.GetForegroundWindow();
-                    if (currentHandle != Engine.Current.Process.MainWindowHandle) return;
+                    if (currentHandle != _d3ProcessHandle) return;
 
                     //Not in town
-                    if (Avatar.Current.HasBuff(Powers.InTownBuff, (int)AttributeId.BuffIconCount0)) return;
+                    //if (Avatar.Current.HasBuff(Powers.InTownBuff, (int)AttributeId.BuffIconCount0)) return;
 
                     //Enough Resources
-                    if (ActorCommonData.Local.GetResourcePct() < key.ResourcePct) return;
+                    //if (ActorCommonData.Local.GetResourcePct() < key.ResourcePct) return;
 
                     //Monster count
-                    if (!ActorCommonData.Local.HasMonstersWithin(key.RangeCheck, key.MonsterWithin)) return;
+                    if (Avatar.Current.GetMonsterWithin(key.RangeCheck).Length < key.MonsterWithin) return;
 
                     //Now send key
                     _input.Keyboard.KeyPress(key.Code);

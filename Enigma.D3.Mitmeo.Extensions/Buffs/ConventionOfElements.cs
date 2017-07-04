@@ -103,7 +103,7 @@ namespace Enigma.D3.Mitmeo.Extensions.Buffs
                 _elementEndTickAttributes[current]
             ).FirstOrDefault();
 
-            var currentRemain = end != null ? (end.Value - Engine.Current.ObjectManager.x7B0_Storage.GetGameTick()) / 60d : 0;
+            var currentRemain = end != null ? (end.Value - Engine.Current.ObjectManager.x7E0_Storage.GetGameTick()) / 60d : 0;
 
             if (buff == null) return Math.Round(currentRemain, dp);
             else

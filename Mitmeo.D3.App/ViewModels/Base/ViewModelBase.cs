@@ -1,4 +1,4 @@
-﻿using Enigma.D3;
+﻿using Enigma.D3.Mitmeo.Extensions.Models;
 using PropertyChanged;
 
 namespace Mitmeo.D3.App.ViewModels.Base
@@ -15,16 +15,7 @@ namespace Mitmeo.D3.App.ViewModels.Base
         {
             get
             {
-                try
-                {
-                    var engine = Engine.Current;
-                    var player = ActorCommonData.Local;
-                    return engine == null || player == null ? false : true;
-                }
-                catch
-                {
-                    return false;
-                }
+                return Avatar.Current.IsValid;
             }
         }
     }
