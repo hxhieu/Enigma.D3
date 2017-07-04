@@ -55,15 +55,11 @@ namespace Enigma.D3.MapHack
 
         public MitmeoShell()
         {
-            DataContext = this;
-            InitializeComponent();
-        }
-
-        public void Init()
-        {
             Options = MapMarkerOptions.Instance;
             SendKeys = new SendKeyViewModel("keys.db");
             BuffWatcher = new BuffWatchViewModel();
+            DataContext = this;
+            InitializeComponent();
         }
     }
 }

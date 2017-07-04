@@ -121,17 +121,7 @@
                     </DockPanel>
                 </StackPanel>
             </TabItem>
-            <TabItem Visibility="Hidden">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Settings" FontSize="10"/>
-                    </StackPanel>
-                </TabItem.Header>
-                <Grid>
-
-                </Grid>
-            </TabItem>
-            <TabItem Visibility="Hidden">
+            <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Margin="0,0,4,0" IsChecked="True"/>
@@ -143,6 +133,16 @@
                     <CheckBox Content="Show Chests" IsChecked="{Binding Options.ShowChests}" Margin="10,5" FontSize="10" />
                     <CheckBox Content="Show Wreckables" IsChecked="{Binding Options.ShowWreckables}" Margin="10,5" FontSize="10" />
                 </StackPanel>
+            </TabItem>
+            <TabItem Visibility="Hidden">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Settings" FontSize="10"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+
+                </Grid>
             </TabItem>
         </TabControl>
     </StackPanel>
