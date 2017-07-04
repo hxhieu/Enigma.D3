@@ -1,69 +1,70 @@
-﻿using Enigma.D3.MapHack;
-using Enigma.Wpf;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Windows;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Windows.Controls;
+using Enigma.Wpf;
+using Enigma.D3.MapHack;
+using Enigma.D3.MemoryModel;
+using System.Diagnostics;
+using Enigma.Memory;
 
 namespace Enigma.D3.Bootloader
 {
     internal class App : Application
     {
         [STAThread]
-        public static void Main()
-        {
-            var app = new App();
-            app.Run();
-        }
+        public static void Main() => new App().Run();
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            MainWindow = MitmeoShell.Instance;
+            MainWindow = Shell.Instance;
             MainWindow.Show();
             ShutdownMode = ShutdownMode.OnMainWindowClose;
+
             Task.Factory.StartNew(() =>
             {
                 while (true)
                 {
-                    using (var engine = CreateEngine())
-                    using (var watcher = new WatcherThread(engine))
+                    using (var ctx = CreateMemoryContext())
+                    using (var watcher = new WatcherThread(ctx))
                     {
-                        MitmeoShell.Instance.IsAttached = true;
-                        //Minimap minimap = null;
+                        Shell.Instance.IsAttached = true;
+                        Minimap minimap = null;
                         OverlayWindow overlay = null;
                         Execute.OnUIThread(() =>
                         {
-                            MitmeoShell.Instance.Init(engine);
-
-                            //Canvas canvas = new Canvas();
-                            //overlay = OverlayWindow.Create(engine.Process, canvas);
-                            //overlay.Show();
-                            //minimap = new Minimap(canvas);
+                            Canvas canvas = new Canvas();
+                            overlay = OverlayWindow.Create((ctx.Memory.Reader as ProcessMemoryReader).Process, canvas);
+                            overlay.Show();
+                            minimap = new Minimap(canvas);
                         });
-                        //watcher.AddTask(minimap.Update);
+                        watcher.AddTask(minimap.Update);
                         watcher.Start();
-                        engine.Process.WaitForExit();
-                        //Execute.OnUIThread(() => overlay.Close());
+                        (ctx.Memory.Reader as ProcessMemoryReader).Process.WaitForExit();
+                        Execute.OnUIThread(() => overlay.Close());
                     }
-                    MitmeoShell.Instance.IsAttached = false;
-                    //Execute.OnUIThread(() => MainWindow.Close());
+                    Shell.Instance.IsAttached = false;
                 }
             }, TaskCreationOptions.LongRunning);
         }
 
-        private Engine CreateEngine()
+        private MemoryContext CreateMemoryContext()
         {
-            Engine engine = Engine.Create();
-            while (engine == null)
-            {
+            var ctx = default(MemoryContext);
+
+            // Wait for process attachment.
+            while ((ctx = MemoryContext.FromProcess()) == null)
                 Thread.Sleep(1000);
-                engine = Engine.Create();
-            }
-            while (engine.ApplicationLoopCount == 0)
-            {
+
+            // Wait for full initialization.
+            while (ctx.DataSegment.ApplicationLoopCount == 0)
                 Thread.Sleep(1000);
-            }
-            return engine;
+
+            return ctx;
         }
     }
 }
