@@ -107,7 +107,6 @@
     <Compile Include="D3\LocalData.cs" />
     <Compile Include="D3\Player.cs" />
     <Compile Include="D3\PlayerInput.cs" />
-    <Compile Include="D3\PetPortraitInfo.cs" />
     <Compile Include="D3\Quest.cs" />
     <Compile Include="D3\QuestManager.cs" />
     <Compile Include="D3\RefString.cs" />
@@ -188,7 +187,6 @@
     <Compile Include="D3\Memory\Allocator.cs" />
     <Compile Include="D3\Memory\AllocatorBlock.cs" />
     <Compile Include="D3\Memory\BasicAllocator.cs" />
-    <Compile Include="D3\NamedCriticalSection.cs" />
     <Compile Include="D3\ObjectManager.cs" />
     <Compile Include="D3\PlayerDataManager.cs" />
     <Compile Include="D3\Preferences\ChatPreferences.cs" />
@@ -209,14 +207,9 @@
     <Compile Include="D3\WorldManager.cs" />
     <Compile Include="D3\WorldPosition.cs" />
     <Compile Include="Input\Hotkey.cs" />
-    <Compile Include="Input\HotkeyIndex.cs" />
-    <Compile Include="Input\Key.cs" />
     <Compile Include="Input\KeyGesture.cs" />
-    <Compile Include="Input\ModifierKeys.cs" />
-    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="D3\Win32\CriticalSection.cs" />
-    <Compile Include="ObjectCache.cs" />
     <Compile Include="TypeSystem\AttributeDescriptor.cs" />
     <Compile Include="TypeSystem\FieldDescriptor.cs" />
     <Compile Include="TypeSystem\MessageDescriptor.cs" />

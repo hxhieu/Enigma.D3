@@ -16,7 +16,7 @@ namespace Enigma.D3
 		public int x000_Id { get { return Read<int>(0x000); } }
 		public int x004_Flags { get { return Read<int>(0x004); } }
 		public int _x008 { get { return Read<int>(0x008); } }
-		public Map<int, AttributeValue> x00C_PtrMap { get { return Dereference<Map<int, AttributeValue>>(0x00C); } }
+		public Map<int, AttributeValue> x00C_PtrMap { get { return ReadPointer<Map<int, AttributeValue>>(0x00C).Dereference(); } }
 		public Map<int, AttributeValue> x010_Map { get { return Read<Map<int, AttributeValue>>(0x010); } }
 		public int _x074 { get { return Read<int>(0x074); } }
 		public int _x078 { get { return Read<int>(0x078); } }
@@ -618,7 +618,7 @@ namespace Enigma.D3
 
 		public static FastAttribGroup Get(int groupId)
 		{
-			return FastAttrib.Instance.IfNotNull(fastAttrib => fastAttrib.x54_Groups[(short)groupId]);
+			return FastAttrib.Instance?.x54_Groups[(short)groupId];
 		}
 	}
 }
