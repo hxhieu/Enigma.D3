@@ -59,7 +59,7 @@ namespace Enigma.D3.MapHack
             InitializeComponent();
         }
 
-        public void Init(Engine engine)
+        public void Init()
         {
             Options = MapMarkerOptions.Instance;
             SendKeys = new SendKeyViewModel("keys.db");
