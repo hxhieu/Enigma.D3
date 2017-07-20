@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\SNODefinition.cs" />
+    <Compile Include="Assets\SNODiskEntry.cs" />
+    <Compile Include="Assets\SNOFiles.cs" />
+    <Compile Include="Assets\SNOGroupStorage.cs" />
     <Compile Include="BattleNet\Hero.cs" />
     <Compile Include="BattleNet\Map.cs" />
     <Compile Include="Collections\CircularBuffer.cs" />
@@ -48,10 +52,13 @@
     <Compile Include="Collections\LinkedList.cs" />
     <Compile Include="Collections\Map.cs" />
     <Compile Include="Collections\Vector.cs" />
+    <Compile Include="Controls\Control.cs" />
     <Compile Include="Core\ACD.cs" />
     <Compile Include="Core\ACDManager.cs" />
     <Compile Include="Core\ActiveSkillSavedData.cs" />
     <Compile Include="Core\Actor.cs" />
+    <Compile Include="Core\Animation.cs" />
+    <Compile Include="Core\AttributeReader.cs" />
     <Compile Include="Core\FastAttrib.cs" />
     <Compile Include="Core\FastAttribGroup.cs" />
     <Compile Include="Core\FloatingNumber.cs" />
@@ -68,6 +75,7 @@
     <Compile Include="Core\TimedEvent.cs" />
     <Compile Include="Core\Trickle.cs" />
     <Compile Include="Core\TrickleManager.cs" />
+    <Compile Include="Core\UIID.cs" />
     <Compile Include="Core\UIManager.cs" />
     <Compile Include="Core\Waypoint.cs" />
     <Compile Include="Core\WaypointManager.cs" />
@@ -78,6 +86,8 @@
     <Compile Include="MemoryManagement\HeapNode.cs" />
     <Compile Include="MemoryManagement\LocalHeap.cs" />
     <Compile Include="MemoryManagement\MemoryManager.cs" />
+    <Compile Include="MemoryObjectExtensions.cs" />
+    <Compile Include="MemorySegment.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Preferences\ChatPreferences.cs" />
     <Compile Include="Preferences\GameplayPreferences.cs" />
@@ -93,6 +103,9 @@
     <Compile Include="SymbolTable.X64.cs" />
     <Compile Include="SymbolTable.X86.cs" />
     <Compile Include="TypeSystem\AttributeDescriptor.cs" />
+    <Compile Include="TypeSystem\FieldDescriptor.cs" />
+    <Compile Include="TypeSystem\SymbolDescriptor.cs" />
+    <Compile Include="TypeSystem\ValueTypeDescriptor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Enigma.D3.Assets\Enigma.D3.Assets.csproj">

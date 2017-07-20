@@ -54,8 +54,6 @@
     <Compile Include="ArraySizeAttribute.cs" />
     <Compile Include="D3\ActTransitions.cs" />
     <Compile Include="D3\AnimationBuffer.cs" />
-    <Compile Include="D3\AttributeKey.cs" />
-    <Compile Include="D3\AttributeValue.cs" />
     <Compile Include="D3\CameraManager.cs" />
     <Compile Include="D3\Cinematography.cs" />
     <Compile Include="D3\ClothManager.cs" />
@@ -183,7 +181,6 @@
     <Compile Include="D3\Graphics\DisplayModeFlags.cs" />
     <Compile Include="D3\Engine.cs" />
     <Compile Include="D3\Helpers\CodeGeneratorHelper.cs" />
-    <Compile Include="D3\Helpers\HashUtils.cs" />
     <Compile Include="D3\Memory\Allocator.cs" />
     <Compile Include="D3\Memory\AllocatorBlock.cs" />
     <Compile Include="D3\Memory\BasicAllocator.cs" />

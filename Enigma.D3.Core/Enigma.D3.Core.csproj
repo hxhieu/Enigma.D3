@@ -40,6 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributeModel\Attribute.cs" />
+    <Compile Include="AttributeModel\AttributeKey.cs" />
+    <Compile Include="AttributeModel\Attributes.cs" />
+    <Compile Include="AttributeModel\AttributeValue.cs" />
+    <Compile Include="AttributeModel\ComplexAttribute.cs" />
+    <Compile Include="AttributeModel\IAttributeReader.cs" />
+    <Compile Include="AttributeModel\SimpleAttribute.cs" />
     <Compile Include="DataTypes\AABB.cs" />
     <Compile Include="DataTypes\Acceleration.cs" />
     <Compile Include="DataTypes\Angle.cs" />
@@ -71,8 +78,10 @@
     <Compile Include="DataTypes\Vector3.cs" />
     <Compile Include="DataTypes\Velocity.cs" />
     <Compile Include="Enums\ActorType.cs" />
+    <Compile Include="Enums\ControlType.cs" />
     <Compile Include="Enums\DamageType.cs" />
     <Compile Include="Enums\FollowerType.cs" />
+    <Compile Include="Enums\GameDifficulty.cs" />
     <Compile Include="Enums\GBType.cs" />
     <Compile Include="Enums\GemType.cs" />
     <Compile Include="Enums\GizmoType.cs" />
@@ -89,7 +98,9 @@
     <Compile Include="Enums\SnoGroupId.cs" />
     <Compile Include="Enums\SNOType.cs" />
     <Compile Include="Enums\WorldType.cs" />
+    <Compile Include="HashUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UIKey.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\Enigma.D3.Core.Generated\Enigma.D3.Core.Generated.projitems" Label="Shared" />
