@@ -41,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ACDEx.cs" />
-    <Compile Include="ActorCommonDataExt.cs" />
     <Compile Include="Buffs\ConventionOfElements.cs" />
     <Compile Include="Buffs\IBuff.cs" />
     <Compile Include="Enums.cs" />

@@ -9,6 +9,9 @@ using System.Timers;
 
 namespace Enigma.D3.Mitmeo.Extensions.Models
 {
+    /// <summary>
+    /// TODO: Fix with new Memory Model
+    /// </summary>
     public class Avatar
     {
         private static Lazy<Avatar> _instance = new Lazy<Avatar>(() => new Avatar());
@@ -18,22 +21,23 @@ namespace Enigma.D3.Mitmeo.Extensions.Models
         private E3M.MemoryContext _ctx;
         private bool _isLocalActorReady;
 
-        private ContainerObserver<E3M.Core.ACD> GetAcdObserver()
-        {
-            var observer = new ContainerObserver<E3M.Core.ACD>(_ctx.DataSegment.ObjectManager.ACDManager.ActorCommonData);
-            observer.Update();
-            return observer;
-        }
+        //private ContainerObserver<E3M.Core.ACD> GetAcdObserver()
+        //{
+        //    var observer = new ContainerObserver<E3M.Core.ACD>(_ctx.DataSegment.ObjectManager.ACDManager.ActorCommonData);
+        //    observer.Update();
+        //    return observer;
+        //}
 
         private E3M.Core.ACD GetCommonData()
         {
-            var observer = GetAcdObserver();
-            var id = GetPlayerData().ACDID;
-            var acd = observer.NewItems.FirstOrDefault(x => x.ID == id);
-            if (acd == null)
-                acd = Enigma.Memory.MemoryObjectFactory.UnsafeCreate<E3M.Core.ACD>(new Enigma.Memory.BufferMemoryReader(observer.CurrentData),
-                    Array.IndexOf(observer.CurrentMapping, id) * observer.Container.ItemSize);
-            return acd;
+            return null;
+            //var observer = GetAcdObserver();
+            //var id = GetPlayerData().ACDID;
+            //var acd = observer.NewItems.FirstOrDefault(x => x.ID == id);
+            //if (acd == null)
+            //    acd = Enigma.Memory.MemoryObjectFactory.UnsafeCreate<E3M.Core.ACD>(new Enigma.Memory.BufferMemoryReader(observer.CurrentData),
+            //        Array.IndexOf(observer.CurrentMapping, id) * observer.Container.ItemSize);
+            //return acd;
         }
 
         private E3M.Core.PlayerData GetPlayerData()
@@ -99,18 +103,20 @@ namespace Enigma.D3.Mitmeo.Extensions.Models
 
         public E3M.Core.ACD[] GetMonsterWithin(float range)
         {
-            if (!IsValid) return new E3M.Core.ACD[0];
-            var playerAcd = GetCommonData();
-            var acds = GetAcdObserver().NewItems.Where(x => x.IsMonster() && x.DistanceTo(playerAcd) <= range).ToArray();
-            return acds;
+            return null;
+            //if (!IsValid) return new E3M.Core.ACD[0];
+            //var playerAcd = GetCommonData();
+            //var acds = GetAcdObserver().NewItems.Where(x => x.IsMonster() && x.DistanceTo(playerAcd) <= range).ToArray();
+            //return acds;
         }
 
         public E3M.Core.ACD[] GetCorpseWithin(float range)
         {
-            if (!IsValid) return new E3M.Core.ACD[0];
-            var playerAcd = GetCommonData();
-            var acds = GetAcdObserver().NewItems.Where(x => x.IsCorpse() && x.DistanceTo(playerAcd) <= range).ToArray();
-            return acds;
+            return null;
+            //if (!IsValid) return new E3M.Core.ACD[0];
+            //var playerAcd = GetCommonData();
+            //var acds = GetAcdObserver().NewItems.Where(x => x.IsCorpse() && x.DistanceTo(playerAcd) <= range).ToArray();
+            //return acds;
         }
 
         public IBuff GetBuff(int powerSnoId)
@@ -120,8 +126,9 @@ namespace Enigma.D3.Mitmeo.Extensions.Models
 
         public bool HasBuff(int powerSnoId, int attrId)
         {
-            var activePowers = ActorCommonData.Local.GetActivePowers(powerSnoId);
-            return activePowers != null && activePowers.FirstOrDefault() != null;
+            return false;
+            //var activePowers = ActorCommonData.Local.GetActivePowers(powerSnoId);
+            //return activePowers != null && activePowers.FirstOrDefault() != null;
         }
     }
 }

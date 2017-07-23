@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace Enigma.D3.Mitmeo.Extensions.Buffs
 {
+    /// <summary>
+    /// TODO: Fix to use new Memory Model
+    /// </summary>
     public class ConventionOfElements : IBuff
     {
         private static readonly Dictionary<HeroClass, DamageType[]> _classElements = new Dictionary<HeroClass, DamageType[]>
@@ -20,8 +23,7 @@ namespace Enigma.D3.Mitmeo.Extensions.Buffs
 
         public static List<DamageType> GetHeroElements()
         {
-            if (PlayerData.Local == null || !_classElements.ContainsKey(PlayerData.Local.GetHeroClass())) return null;
-            return _classElements[PlayerData.Local.GetHeroClass()].ToList();
+            return null;
         }
 
         private static readonly Dictionary<DamageType, AttributeId> _elementBuffAttributes = new Dictionary<DamageType, AttributeId>
@@ -67,67 +69,62 @@ namespace Enigma.D3.Mitmeo.Extensions.Buffs
             get { return Powers.Convention_PowerSno; }
         }
 
-        private readonly Func<ActorCommonData> _getAcd;
-
-        public ConventionOfElements(Func<ActorCommonData> getAcd)
-        {
-            _getAcd = getAcd;
-        }
-
         public string GetCurrent()
         {
-            string current = null;
+            return null;
+            //string current = null;
 
-            var powers = _getAcd().GetActivePowers(PowerSnoId);
-            if (powers != null && powers.Any())
-            {
-                foreach (var element in _elementBuffAttributes)
-                {
-                    var buff = powers.FirstOrDefault(x => x.AttrId == (int)element.Value);
-                    if (buff != null)
-                    {
-                        current = element.Key.ToString();
-                        break;
-                    }
-                }
-            }
+            //var powers = _getAcd().GetActivePowers(PowerSnoId);
+            //if (powers != null && powers.Any())
+            //{
+            //    foreach (var element in _elementBuffAttributes)
+            //    {
+            //        var buff = powers.FirstOrDefault(x => x.AttrId == (int)element.Value);
+            //        if (buff != null)
+            //        {
+            //            current = element.Key.ToString();
+            //            break;
+            //        }
+            //    }
+            //}
 
-            return current;
+            //return current;
         }
 
         public double GetRemain(string buff = null, int dp = 1)
         {
-            var current = (DamageType)Enum.Parse(typeof(DamageType), GetCurrent());
-            var end = _getAcd().GetActivePowers(
-                PowerSnoId,
-                _elementEndTickAttributes[current]
-            ).FirstOrDefault();
+            return double.MaxValue;
+            //var current = (DamageType)Enum.Parse(typeof(DamageType), GetCurrent());
+            //var end = _getAcd().GetActivePowers(
+            //    PowerSnoId,
+            //    _elementEndTickAttributes[current]
+            //).FirstOrDefault();
 
-            var currentRemain = end != null ? (end.Value - Engine.Current.ObjectManager.x7E0_Storage.GetGameTick()) / 60d : 0;
+            //var currentRemain = end != null ? (end.Value - Engine.Current.ObjectManager.x7E0_Storage.GetGameTick()) / 60d : 0;
 
-            if (buff == null) return Math.Round(currentRemain, dp);
-            else
-            {
-                var heroElements = GetHeroElements();
-                var type = (DamageType)Enum.Parse(typeof(DamageType), buff);
+            //if (buff == null) return Math.Round(currentRemain, dp);
+            //else
+            //{
+            //    var heroElements = GetHeroElements();
+            //    var type = (DamageType)Enum.Parse(typeof(DamageType), buff);
 
-                var currentIndex = heroElements.FindIndex(x => x == current);
-                var targetIndex = heroElements.FindIndex(x => x == type);
+            //    var currentIndex = heroElements.FindIndex(x => x == current);
+            //    var targetIndex = heroElements.FindIndex(x => x == type);
 
-                if (currentIndex == targetIndex) return -Math.Round(currentRemain, dp);
+            //    if (currentIndex == targetIndex) return -Math.Round(currentRemain, dp);
 
-                var step = 0;
-                if (targetIndex > currentIndex)
-                {
-                    step = targetIndex - currentIndex;
-                }
-                else
-                {
-                    step = heroElements.Count - currentIndex + targetIndex;
-                }
+            //    var step = 0;
+            //    if (targetIndex > currentIndex)
+            //    {
+            //        step = targetIndex - currentIndex;
+            //    }
+            //    else
+            //    {
+            //        step = heroElements.Count - currentIndex + targetIndex;
+            //    }
 
-                return Math.Round(currentRemain + (step - 1) * 4, dp);
-            }
+            //    return Math.Round(currentRemain + (step - 1) * 4, dp);
+            //}
         }
     }
 }
