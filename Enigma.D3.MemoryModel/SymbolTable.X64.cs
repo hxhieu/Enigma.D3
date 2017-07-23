@@ -10,7 +10,7 @@ namespace Enigma.D3.MemoryModel
     {
         private void InitX64()
         {
-            Version = new Version(2, 6, 0, 46006);
+            Version = new Version(2, 6, 0, 46568);
             Platform = Platform.X64;
 
             DataSegment.Address = 0x141B57000;
@@ -32,10 +32,11 @@ namespace Enigma.D3.MemoryModel
             DataSegment.AttributeDescriptors = 0x141ED3820;
             DataSegment.AttributeDescriptorsCount = 0x5B9;
             DataSegment.MemoryManager = 0x141F6E460;
+            DataSegment.SNOFiles = 0x141E5A020;
             DataSegment.SNOGroups = 0x141E5FAE0;
             DataSegment.SNOGroupsByCode = 0x141E5F8B0;
             DataSegment.ContainerManager = 0x141F71D80;
-            DataSegment.MessageDescriptor = 0x1413B1C08;
+            DataSegment.MessageDescriptor = 0x1413B1C18;
 
             ObjectManager.SizeOf = 0xBC0;
             ObjectManager.RenderTick = 0x4;
@@ -56,7 +57,7 @@ namespace Enigma.D3.MemoryModel
             GameGlobals.GameServerAddress = 0x5C;
             GameGlobals.GameServerAddressLength = 0x80;
 
-            Storage.GameHandicap = 0x4;
+            Storage.GameDifficulty = 0x4;
             Storage.GameTick = 0x120;
             Storage.PlayerDataManager = 0x140;
             Storage.FastAttrib = 0x180;
@@ -68,6 +69,7 @@ namespace Enigma.D3.MemoryModel
             Actor.ID = 0x0;
             Actor.Name = 0x4;
             Actor.NameLength = 0x80;
+            Actor.SSceneID = 0xE4;
 
             ACDManager.SizeOf = 0x150;
             ACDManager.ActorCommonData = 0x0;
@@ -76,17 +78,23 @@ namespace Enigma.D3.MemoryModel
             ACD.ID = 0x0;
             ACD.Name = 0x4;
             ACD.NameLength = 0x80;
+            ACD.ActorID = 0x8C;
             ACD.ActorSNO = 0x90;
             ACD.MonsterQuality = 0xB8;
             ACD.Position = 0xD8;
             ACD.Radius = 0xE4;
-            ACD.WorldSNO = 0x118;
+            ACD.SWorldID = 0x118;
+            ACD.SSceneID = 0x11C;
+            ACD.ItemLocation = 0x124;
+            ACD.ItemSlotX = 0x128;
+            ACD.ItemSlotY = 0x12C;
             ACD.FastAttribGroupID = 0x130;
             ACD.ActorType = 0x1BC;
             ACD.GizmoType = 0x1B8;
             ACD.Hitpoints = 0x1C0;
             ACD.TeamID = 0x1C8;
             ACD.ObjectFlags = 0x1CC;
+            ACD.Animation = 0x290;
             ACD.CollisionFlags = 0x2D8;
 
             LocalData.SizeOf = 0x38;
@@ -120,7 +128,8 @@ namespace Enigma.D3.MemoryModel
             PlayerData.ACDID = 0x4;
             PlayerData.ActorID = 0x8;
             PlayerData.PlayerSavedData = 0x130;
-            PlayerData.HeroName = 0xB209;
+            PlayerData.HeroID = 0xB1D0;
+            PlayerData.HeroName = 0xB1D8;
             PlayerData.ActorSNO = 0xC210;
             PlayerData.LifePercentage = 0xC214;
             PlayerData.HeroClass = 0xC220;
@@ -166,8 +175,8 @@ namespace Enigma.D3.MemoryModel
 
             Player.SizeOf = 0xA3C8;
             Player.LocalPlayerIndex = 0x0;
+            Player.FloatingNumbers = 0xA218;
             Player.LatencySamples = 0xA348;
-            Player.FloatingNumbers = 0xA238;
 
             AttributeDescriptor.SizeOf = 0x40;
             AttributeDescriptor.ID = 0x0;
@@ -176,11 +185,11 @@ namespace Enigma.D3.MemoryModel
             AttributeDescriptor.Name = 0x28;
             AttributeDescriptor.NameLength = 0x100;
 
-            FloatingNumber.SizeOf = 0x64;
-            FloatingNumber.WorldPos = 0x4;
-            FloatingNumber.WorldSNO = 0x10;
-            FloatingNumber.Type = 0x5C;
-            FloatingNumber.Value = 0x60;
+            FloatingNumber.SizeOf = 0x60;
+            FloatingNumber.Type = 0x0;
+            FloatingNumber.WorldPos = 0x8;
+            FloatingNumber.SWorldID = 0x14;
+            FloatingNumber.Value = 0x5C;
 
             TimedEvent.SizeOf = 0x58;
 
@@ -200,6 +209,14 @@ namespace Enigma.D3.MemoryModel
             RWindowMgr.SizeOf = 0x28;
 
             SubObjectGfx.SizeOf = 0x128;
+
+            SNOFiles.SizeOf = 0x5568;
+            SNOFiles.SNODiskEntries = 0x118;
+
+            SNOGroupStorage.SizeOf = 0xA8;
+            SNOGroupStorage.Container = 0x18;
+            SNOGroupStorage.Name = 0x30;
+            SNOGroupStorage.NameLength = 0x20;
         }
     }
 }

@@ -38,13 +38,17 @@ namespace Enigma.D3.MemoryModel
             return new MemoryContext(new MiniDumpMemoryReader(path));
         }
 
+        /// <summary>
+        /// Attempts to create a memory context by looking for default process names (64-bit prioritized).
+        /// If no matching process is found, null is returned.
+        /// </summary>
         public static MemoryContext FromProcess()
         {
             var process = Process.GetProcessesByName("Diablo III64").FirstOrDefault();
             if (process == null)
                 process = Process.GetProcessesByName("Diablo III").FirstOrDefault();
             if (process == null)
-                throw new FileNotFoundException("Could not find a process.");
+                return null;
 
             return new MemoryContext(new ProcessMemoryReader(process));
         }
@@ -56,7 +60,7 @@ namespace Enigma.D3.MemoryModel
 
             return new MemoryContext(new ProcessMemoryReader(process));
         }
-        
+
         /// <summary>
         /// Attempts to create a memory context by looking for default process names (64-bit prioritized).
         /// This method will block until a matching process is found. To cancel the operation, raise 
@@ -72,10 +76,9 @@ namespace Enigma.D3.MemoryModel
 
             do
             {
-                var process = Process.GetProcessesByName("Diablo III64").FirstOrDefault()
-                           ?? Process.GetProcessesByName("Diablo III").FirstOrDefault();
-                if (process != null)
-                    return FromProcess(process);
+                var ctx = FromProcess();
+                if (ctx != null)
+                    return ctx;
             }
             while (stopSignal.WaitOne(1000) == false);
 
@@ -86,13 +89,17 @@ namespace Enigma.D3.MemoryModel
 
         public DataSegment DataSegment { get; }
 
+        public Version MainModuleVersion { get; }
+
         public MemoryContext(MemoryReader reader)
             : this((reader ?? throw new ArgumentNullException(nameof(reader))).Memory) { }
 
         public MemoryContext(IMemory memory)
         {
             Memory = memory ?? throw new ArgumentNullException(nameof(memory));
+            MainModuleVersion = (Memory.Reader as IHasMainModuleVersion)?.MainModuleVersion;
 
+            TypeHelper.PointerSize = Memory.Reader.PointerSize;
             SymbolTable.Current = new SymbolTable(this);
             DataSegment = Memory.Reader.Read<DataSegment>(SymbolTable.Current.DataSegment.Address);
             TypeHelper.InvalidateCache(); // Required in case we make a switch between 32-bit and 64-bit context.
