@@ -1,5 +1,6 @@
 ﻿using Enigma.D3.Enums;
 using Enigma.D3.MemoryModel.Core;
+using Enigma.D3.Mitmeo.Extensions.Consts;
 
 namespace Enigma.D3.Mitmeo.Extensions
 {
@@ -27,7 +28,12 @@ namespace Enigma.D3.Mitmeo.Extensions
 
         public static bool IsCorpse(this ACD acd)
         {
-            return acd.ActorSNO == 454066;
+            return acd.ActorSNO == AcdSNO.Corpse;
+        }
+
+        public static bool IsSkeletonMage(this ACD acd)
+        {
+            return acd.ActorSNO == AcdSNO.SkeletonMage;
         }
     }
 }

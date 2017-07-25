@@ -1,11 +1,11 @@
-﻿using Enigma.D3.ApplicationModel;
-using E3M = Enigma.D3.MemoryModel;
+﻿using Enigma.D3.MemoryModel;
+using Enigma.D3.MemoryModel.Caching;
+using Enigma.D3.MemoryModel.Core;
 using Enigma.D3.Mitmeo.Extensions.Buffs;
+using Enigma.D3.Mitmeo.Extensions.Models.AvatarHeroClass;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Timers;
 
 namespace Enigma.D3.Mitmeo.Extensions.Models
 {
@@ -18,35 +18,34 @@ namespace Enigma.D3.Mitmeo.Extensions.Models
         public static Avatar Current { get { return _instance.Value; } }
 
         private List<IBuff> _buff;
-        private E3M.MemoryContext _ctx;
+        public MemoryContext Context { get; private set; }
         private bool _isLocalActorReady;
+        private int _previousFrame;
+        private Dictionary<string, AvatarHeroClassBase> _heroClassInstances;
 
-        //private ContainerObserver<E3M.Core.ACD> GetAcdObserver()
-        //{
-        //    var observer = new ContainerObserver<E3M.Core.ACD>(_ctx.DataSegment.ObjectManager.ACDManager.ActorCommonData);
-        //    observer.Update();
-        //    return observer;
-        //}
-
-        private E3M.Core.ACD GetCommonData()
+        public ContainerCache<ACD> GetAcdObserver()
         {
-            return null;
-            //var observer = GetAcdObserver();
-            //var id = GetPlayerData().ACDID;
-            //var acd = observer.NewItems.FirstOrDefault(x => x.ID == id);
-            //if (acd == null)
-            //    acd = Enigma.Memory.MemoryObjectFactory.UnsafeCreate<E3M.Core.ACD>(new Enigma.Memory.BufferMemoryReader(observer.CurrentData),
-            //        Array.IndexOf(observer.CurrentMapping, id) * observer.Container.ItemSize);
-            //return acd;
+            var observer = new ContainerCache<ACD>(Context.DataSegment.ObjectManager.ACDManager.ActorCommonData);
+            observer.Update();
+            return observer;
         }
 
-        private E3M.Core.PlayerData GetPlayerData()
+        public ACD GetCommonData()
         {
-            return _ctx.DataSegment.ObjectManager.PlayerDataManager[_ctx.DataSegment.ObjectManager.Player.LocalPlayerIndex];
+            var observer = GetAcdObserver();
+            var id = GetPlayerData().ACDID;
+            var acd = observer.NewItems.FirstOrDefault(x => x.ID == id);
+            return acd;
+        }
+
+        public PlayerData GetPlayerData()
+        {
+            return Context.DataSegment.ObjectManager.PlayerDataManager[Context.DataSegment.ObjectManager.Player.LocalPlayerIndex];
         }
 
         public Avatar()
         {
+            _heroClassInstances = new Dictionary<string, AvatarHeroClassBase>();
             _buff = new List<IBuff>();
 
             //{
@@ -54,14 +53,31 @@ namespace Enigma.D3.Mitmeo.Extensions.Models
             //};
         }
 
-        public void Init(E3M.MemoryContext ctx)
+        public T As<T>() where T : AvatarHeroClassBase, new()
         {
-            _ctx = ctx;
-            var timer = new Timer(1000);
+            var typeName = typeof(T).FullName;
+
+            if (_heroClassInstances.ContainsKey(typeName))
+            {
+                return _heroClassInstances[typeName] as T;
+            }
+            else
+            {
+                var instance = new T();
+                instance.Init(this);
+                _heroClassInstances.Add(typeName, instance);
+                return instance;
+            }
+        }
+
+        public void Init(MemoryContext ctx)
+        {
+            Context = ctx;
+            //var timer = new Timer(2000);
             //timer.Elapsed += (s, e) =>
             //{
-            //    var test = GetCorpseWithin(60);
-            //    Debug.WriteLine(test.Length);
+            //    var necro = As<Necromancer>();
+            //    Debug.WriteLine(necro.GetCorpseWithin().Length);
             //};
 
             //timer.Start();
@@ -71,17 +87,25 @@ namespace Enigma.D3.Mitmeo.Extensions.Models
         {
             get
             {
-                var _localData = _ctx.DataSegment.LocalData;
-                _localData.TakeSnapshot();
+                // Don't do anything unless game updated frame.
+                // Lesser frame than before = left game probably.
+                //int currentFrame = Context.DataSegment.ObjectManager.RenderTick;
+                //if (currentFrame <= _previousFrame)
+                //    return false;
 
-                if (_localData.Read<byte>(0) == 0xCD) // structure is being updated, everything is cleared with 0xCD ('-')
+                //_previousFrame = currentFrame;
+
+                var localData = Context.DataSegment.LocalData;
+                localData.TakeSnapshot();
+
+                if (localData.Read<byte>(0) == 0xCD) // structure is being updated, everything is cleared with 0xCD ('-')
                 {
                     if (!_isLocalActorReady)
                         return false;
                 }
                 else
                 {
-                    if (!_localData.IsStartUpGame)
+                    if (!localData.IsStartUpGame)
                     {
                         if (!_isLocalActorReady)
                         {
@@ -101,34 +125,17 @@ namespace Enigma.D3.Mitmeo.Extensions.Models
             }
         }
 
-        public E3M.Core.ACD[] GetMonsterWithin(float range)
+        public ACD[] GetMonsterWithin(float range)
         {
-            return null;
-            //if (!IsValid) return new E3M.Core.ACD[0];
-            //var playerAcd = GetCommonData();
-            //var acds = GetAcdObserver().NewItems.Where(x => x.IsMonster() && x.DistanceTo(playerAcd) <= range).ToArray();
-            //return acds;
+            if (!IsValid) return new ACD[0];
+            var playerAcd = GetCommonData();
+            var acds = GetAcdObserver().NewItems.Where(x => x.IsMonster() && x.DistanceTo(playerAcd) <= range).ToArray();
+            return acds;
         }
 
-        public E3M.Core.ACD[] GetCorpseWithin(float range)
+        public float GetHealthPercent()
         {
-            return null;
-            //if (!IsValid) return new E3M.Core.ACD[0];
-            //var playerAcd = GetCommonData();
-            //var acds = GetAcdObserver().NewItems.Where(x => x.IsCorpse() && x.DistanceTo(playerAcd) <= range).ToArray();
-            //return acds;
-        }
-
-        public IBuff GetBuff(int powerSnoId)
-        {
-            return _buff.FirstOrDefault(x => x.PowerSnoId == powerSnoId);
-        }
-
-        public bool HasBuff(int powerSnoId, int attrId)
-        {
-            return false;
-            //var activePowers = ActorCommonData.Local.GetActivePowers(powerSnoId);
-            //return activePowers != null && activePowers.FirstOrDefault() != null;
+            return GetPlayerData().LifePercentage;
         }
     }
 }

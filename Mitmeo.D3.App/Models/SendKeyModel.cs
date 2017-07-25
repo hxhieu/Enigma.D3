@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Enigma.D3.Mitmeo.Extensions.Consts;
+using System;
 using System.Collections.Generic;
 using WindowsInput.Native;
 
@@ -7,21 +8,7 @@ namespace Mitmeo.D3.App.Models
     [Serializable]
     public class SendKeyModel
     {
-        private List<VirtualKeyCode> _availableKeys = new List<VirtualKeyCode>
-        {
-            VirtualKeyCode.VK_1,
-            VirtualKeyCode.VK_2,
-            VirtualKeyCode.VK_3,
-            VirtualKeyCode.VK_4,
-            VirtualKeyCode.VK_Q,
-            VirtualKeyCode.VK_W,
-            VirtualKeyCode.VK_E,
-            VirtualKeyCode.VK_R,
-            VirtualKeyCode.SPACE,
-            VirtualKeyCode.TAB
-        };
-
-        public List<VirtualKeyCode> AvailableKeys { get { return _availableKeys; } }
+        public List<VirtualKeyCode> AvailableKeys { get { return Misc.VitualKeys; } }
 
         public VirtualKeyCode Code { get; set; }
         public double Interval { get; set; }

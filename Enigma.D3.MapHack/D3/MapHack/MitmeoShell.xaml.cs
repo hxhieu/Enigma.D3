@@ -22,6 +22,7 @@ namespace Enigma.D3.MapHack
         public SendKeyViewModel SendKeys { get; private set; }
         public BuffWatchViewModel BuffWatcher { get; private set; }
         public MapMarkerOptions Options { get; private set; }
+        public MiscViewModel Misc { get; private set; }
         public bool IsAttached { get; set; }
         public double ShellHeight { get; private set; } = SHELL_MAXIMISE;
         public string ToggleButtonText { get; private set; } = "-";
@@ -60,6 +61,7 @@ namespace Enigma.D3.MapHack
             Options = MapMarkerOptions.Instance;
             SendKeys = new SendKeyViewModel("keys.db");
             BuffWatcher = new BuffWatchViewModel();
+            Misc = new MiscViewModel();
             DataContext = this;
             InitializeComponent();
         }

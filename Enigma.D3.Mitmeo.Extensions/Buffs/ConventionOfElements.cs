@@ -1,5 +1,5 @@
 ﻿using Enigma.D3.Enums;
-using Enigma.D3.Mitmeo.Extensions.Enums;
+using Enigma.D3.Mitmeo.Extensions.Consts;
 using System;
 using System.Collections.Generic;
 using System.Linq;

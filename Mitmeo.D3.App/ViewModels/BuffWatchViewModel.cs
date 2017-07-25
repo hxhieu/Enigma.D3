@@ -1,6 +1,6 @@
 ﻿using Enigma.D3.Enums;
 using Enigma.D3.Mitmeo.Extensions.Buffs;
-using Enigma.D3.Mitmeo.Extensions.Enums;
+using Enigma.D3.Mitmeo.Extensions.Consts;
 using Enigma.D3.Mitmeo.Extensions.Models;
 using Mitmeo.D3.App.UIs;
 using Mitmeo.D3.App.ViewModels.Base;
@@ -28,31 +28,31 @@ namespace Mitmeo.D3.App.ViewModels
 
         public override void AfterDisabled()
         {
-            _overlay.Clear();
-            _overlay.Hide();
+            //_overlay.Clear();
+            //_overlay.Hide();
         }
 
         public override void AfterEnabled()
         {
-            Elements = ConventionOfElements.GetHeroElements();
-            if (CoE)
-            {
-                _overlay.Add(new Alert("CoE", GetCoE), new Point(CoEPosX, CoEPosY));
-            }
-            _overlay.Show();
+            //Elements = ConventionOfElements.GetHeroElements();
+            //if (CoE)
+            //{
+            //    _overlay.Add(new Alert("CoE", GetCoE), new Point(CoEPosX, CoEPosY));
+            //}
+            //_overlay.Show();
         }
 
-        private object GetCoE()
-        {
-            if (!IsReady)
-            {
-                Enabled = false;
-                return null;
-            }
+        //private object GetCoE()
+        //{
+        //    if (!IsReady)
+        //    {
+        //        Enabled = false;
+        //        return null;
+        //    }
 
-            var coe = Avatar.Current.GetBuff(Powers.Convention_PowerSno);
-            var remain = coe.GetRemain(SelectedCoE.ToString(), 0);
-            return remain;
-        }
+        //    var coe = Avatar.Current.GetBuff(Powers.Convention_PowerSno);
+        //    var remain = coe.GetRemain(SelectedCoE.ToString(), 0);
+        //    return remain;
+        //}
     }
 }

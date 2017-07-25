@@ -1,18 +1,15 @@
-﻿using Enigma.D3.Mitmeo.Extensions.Models;
+﻿using Enigma.D3.Mitmeo.Extensions.Consts;
+using Enigma.D3.Mitmeo.Extensions.Models;
 using Mitmeo.D3.App.Commands;
-using Mitmeo.D3.App.Core;
 using Mitmeo.D3.App.Models;
 using Mitmeo.D3.App.ViewModels.Base;
 using PropertyChanged;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
-using WindowsInput;
 using WindowsInput.Native;
 
 namespace Mitmeo.D3.App.ViewModels
@@ -21,11 +18,8 @@ namespace Mitmeo.D3.App.ViewModels
     public class SendKeyViewModel : SaveableViewModel<ObservableCollection<SendKeyModel>>
     {
         private readonly List<Timer> _timers;
-        private readonly InputSimulator _input;
 
         public override ObservableCollection<SendKeyModel> Configuration { get; set; }
-
-        private IntPtr _d3ProcessHandle;
 
         private ICommand _addKeyCommand;
         public ICommand AddKeyCommand
@@ -80,7 +74,6 @@ namespace Mitmeo.D3.App.ViewModels
         public SendKeyViewModel(string saveFileName) : base(saveFileName)
         {
             _timers = new List<Timer>();
-            _input = new InputSimulator();
 
             if (Configuration == null)
             {
@@ -93,11 +86,6 @@ namespace Mitmeo.D3.App.ViewModels
                     }
                 };
             }
-
-            var process = Process.GetProcessesByName("Diablo III64").FirstOrDefault();
-            if (process == null)
-                process = Process.GetProcessesByName("Diablo III").FirstOrDefault();
-            _d3ProcessHandle = process.MainWindowHandle;
         }
 
         public override void AfterDisabled()
@@ -132,8 +120,7 @@ namespace Mitmeo.D3.App.ViewModels
                     if (!Enabled) return;
 
                     //D3 window only
-                    var currentHandle = Win32Interop.GetForegroundWindow();
-                    if (currentHandle != _d3ProcessHandle) return;
+                    if (!CanSendTo(Misc.D3ProcessNames)) return;
 
                     //Not in town
                     //if (Avatar.Current.HasBuff(Powers.InTownBuff, (int)AttributeId.BuffIconCount0)) return;
@@ -145,7 +132,7 @@ namespace Mitmeo.D3.App.ViewModels
                     if (Avatar.Current.GetMonsterWithin(key.RangeCheck).Length < key.MonsterWithin) return;
 
                     //Now send key
-                    _input.Keyboard.KeyPress(key.Code);
+                    Input.Keyboard.KeyPress(key.Code);
                 };
 
                 timer.Start();

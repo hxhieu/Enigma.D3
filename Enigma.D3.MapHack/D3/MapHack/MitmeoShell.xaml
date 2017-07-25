@@ -116,6 +116,23 @@
                     <CheckBox Content="Show Wreckables" IsChecked="{Binding Options.ShowWreckables}" Margin="10,5" FontSize="10" />
                 </StackPanel>
             </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Misc." FontSize="10"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Border Padding="0,10">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox Content="NECRO: Auto Mages" Margin="10,0" IsChecked="{Binding Misc.NecroAutoMage}"></CheckBox>
+                            <ComboBox Width="60" ItemsSource="{Binding Misc.AvailableKeys}" SelectedValue="{Binding Misc.NecroAutoMageKey}"></ComboBox>
+                            <TextBox Width="60" Text="{Binding Misc.NecroAutoMageInterval}" TextAlignment="Right"></TextBox>
+                        </StackPanel>
+                        <Button Content="Apply" Margin="10" Command="{Binding Misc.ApplyCommand}"></Button>
+                    </StackPanel>
+                </Border>
+            </TabItem>
             <TabItem Visibility="Hidden">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -133,16 +150,6 @@
                         </StackPanel>
                     </StackPanel>
                 </Border>
-            </TabItem>
-            <TabItem Visibility="Hidden">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Settings" FontSize="10"/>
-                    </StackPanel>
-                </TabItem.Header>
-                <Grid>
-
-                </Grid>
             </TabItem>
         </TabControl>
     </StackPanel>

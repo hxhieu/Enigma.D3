@@ -88,6 +88,7 @@
     <Compile Include="UIs\UIPosition.cs" />
     <Compile Include="ViewModels\Base\SaveableViewModel.cs" />
     <Compile Include="ViewModels\BuffWatchViewModel.cs" />
+    <Compile Include="ViewModels\MiscViewModel.cs" />
     <Compile Include="ViewModels\SendKeyViewModel.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -117,10 +118,6 @@
     <ProjectReference Include="..\Enigma.D3.MemoryModel\Enigma.D3.MemoryModel.csproj">
       <Project>{92e7130d-9363-458c-abe5-a71f240a9b78}</Project>
       <Name>Enigma.D3.MemoryModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Enigma.D3.Memory\Enigma.D3.Memory.csproj">
-      <Project>{23848103-7DC0-4AB0-958F-B8793FFD1F2D}</Project>
-      <Name>Enigma.D3.Memory</Name>
     </ProjectReference>
     <ProjectReference Include="..\Enigma.D3.Mitmeo.Extensions\Enigma.D3.Mitmeo.Extensions.csproj">
       <Project>{875ba5d9-303c-4053-9ca1-d142a3052c2a}</Project>
